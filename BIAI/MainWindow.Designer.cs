@@ -49,6 +49,8 @@
             this.filesGroupBox = new System.Windows.Forms.GroupBox();
             this.filesListBox = new System.Windows.Forms.ListBox();
             this.predictionGroupBox = new System.Windows.Forms.GroupBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.RSILabel = new System.Windows.Forms.Label();
             this.todayValuesLabel = new System.Windows.Forms.Label();
             this.predictionRespone = new System.Windows.Forms.ListBox();
             this.closeTextBox = new System.Windows.Forms.TextBox();
@@ -66,9 +68,23 @@
             this.functionBox = new System.Windows.Forms.ComboBox();
             this.finalLearningRateBox = new System.Windows.Forms.TextBox();
             this.finalLearningRateLabel = new System.Windows.Forms.Label();
+            this.learnGroupBox = new System.Windows.Forms.GroupBox();
+            this.structureGroupBox = new System.Windows.Forms.GroupBox();
+            this.initializationGroupBox = new System.Windows.Forms.GroupBox();
+            this.initializerParameter2Box = new System.Windows.Forms.TextBox();
+            this.initializerParameter2Label = new System.Windows.Forms.Label();
+            this.initializerParameter1Box = new System.Windows.Forms.TextBox();
+            this.initializerParameter1Label = new System.Windows.Forms.Label();
+            this.initializerLabel = new System.Windows.Forms.Label();
+            this.initializerBox = new System.Windows.Forms.ComboBox();
+            this.trainGroup = new System.Windows.Forms.GroupBox();
             this.menuStrip1.SuspendLayout();
             this.filesGroupBox.SuspendLayout();
             this.predictionGroupBox.SuspendLayout();
+            this.learnGroupBox.SuspendLayout();
+            this.structureGroupBox.SuspendLayout();
+            this.initializationGroupBox.SuspendLayout();
+            this.trainGroup.SuspendLayout();
             this.SuspendLayout();
             // 
             // graph
@@ -88,7 +104,7 @@
             // initalLearningRateLabel
             // 
             this.initalLearningRateLabel.AutoSize = true;
-            this.initalLearningRateLabel.Location = new System.Drawing.Point(12, 39);
+            this.initalLearningRateLabel.Location = new System.Drawing.Point(15, 27);
             this.initalLearningRateLabel.Name = "initalLearningRateLabel";
             this.initalLearningRateLabel.Size = new System.Drawing.Size(101, 13);
             this.initalLearningRateLabel.TabIndex = 1;
@@ -96,14 +112,15 @@
             // 
             // initialLearningRateBox
             // 
-            this.initialLearningRateBox.Location = new System.Drawing.Point(128, 36);
+            this.initialLearningRateBox.Location = new System.Drawing.Point(139, 24);
             this.initialLearningRateBox.Name = "initialLearningRateBox";
             this.initialLearningRateBox.Size = new System.Drawing.Size(100, 20);
             this.initialLearningRateBox.TabIndex = 2;
             // 
             // trainingIterationsBox
             // 
-            this.trainingIterationsBox.Location = new System.Drawing.Point(128, 333);
+            this.trainingIterationsBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.trainingIterationsBox.Location = new System.Drawing.Point(135, 29);
             this.trainingIterationsBox.Name = "trainingIterationsBox";
             this.trainingIterationsBox.Size = new System.Drawing.Size(100, 20);
             this.trainingIterationsBox.TabIndex = 6;
@@ -111,7 +128,8 @@
             // trainingIterationsLabel
             // 
             this.trainingIterationsLabel.AutoSize = true;
-            this.trainingIterationsLabel.Location = new System.Drawing.Point(12, 336);
+            this.trainingIterationsLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.trainingIterationsLabel.Location = new System.Drawing.Point(12, 32);
             this.trainingIterationsLabel.Name = "trainingIterationsLabel";
             this.trainingIterationsLabel.Size = new System.Drawing.Size(91, 13);
             this.trainingIterationsLabel.TabIndex = 5;
@@ -119,7 +137,7 @@
             // 
             // hiddenLayerCountBox
             // 
-            this.hiddenLayerCountBox.Location = new System.Drawing.Point(129, 177);
+            this.hiddenLayerCountBox.Location = new System.Drawing.Point(139, 19);
             this.hiddenLayerCountBox.Name = "hiddenLayerCountBox";
             this.hiddenLayerCountBox.Size = new System.Drawing.Size(100, 20);
             this.hiddenLayerCountBox.TabIndex = 8;
@@ -128,7 +146,7 @@
             // hiddenLayerCountLabel
             // 
             this.hiddenLayerCountLabel.AutoSize = true;
-            this.hiddenLayerCountLabel.Location = new System.Drawing.Point(13, 180);
+            this.hiddenLayerCountLabel.Location = new System.Drawing.Point(15, 22);
             this.hiddenLayerCountLabel.Name = "hiddenLayerCountLabel";
             this.hiddenLayerCountLabel.Size = new System.Drawing.Size(101, 13);
             this.hiddenLayerCountLabel.TabIndex = 7;
@@ -136,7 +154,7 @@
             // 
             // neuronCountBox1
             // 
-            this.neuronCountBox1.Location = new System.Drawing.Point(129, 212);
+            this.neuronCountBox1.Location = new System.Drawing.Point(140, 45);
             this.neuronCountBox1.Name = "neuronCountBox1";
             this.neuronCountBox1.Size = new System.Drawing.Size(100, 20);
             this.neuronCountBox1.TabIndex = 10;
@@ -144,7 +162,7 @@
             // neuronCountLabel1
             // 
             this.neuronCountLabel1.AutoSize = true;
-            this.neuronCountLabel1.Location = new System.Drawing.Point(13, 215);
+            this.neuronCountLabel1.Location = new System.Drawing.Point(15, 48);
             this.neuronCountLabel1.Name = "neuronCountLabel1";
             this.neuronCountLabel1.Size = new System.Drawing.Size(111, 13);
             this.neuronCountLabel1.TabIndex = 9;
@@ -152,7 +170,7 @@
             // 
             // neuronCountBox2
             // 
-            this.neuronCountBox2.Location = new System.Drawing.Point(129, 238);
+            this.neuronCountBox2.Location = new System.Drawing.Point(140, 71);
             this.neuronCountBox2.Name = "neuronCountBox2";
             this.neuronCountBox2.Size = new System.Drawing.Size(100, 20);
             this.neuronCountBox2.TabIndex = 12;
@@ -160,7 +178,7 @@
             // neuronCountLabel2
             // 
             this.neuronCountLabel2.AutoSize = true;
-            this.neuronCountLabel2.Location = new System.Drawing.Point(13, 241);
+            this.neuronCountLabel2.Location = new System.Drawing.Point(15, 74);
             this.neuronCountLabel2.Name = "neuronCountLabel2";
             this.neuronCountLabel2.Size = new System.Drawing.Size(111, 13);
             this.neuronCountLabel2.TabIndex = 11;
@@ -168,7 +186,7 @@
             // 
             // neuronCountBox3
             // 
-            this.neuronCountBox3.Location = new System.Drawing.Point(129, 264);
+            this.neuronCountBox3.Location = new System.Drawing.Point(140, 97);
             this.neuronCountBox3.Name = "neuronCountBox3";
             this.neuronCountBox3.Size = new System.Drawing.Size(100, 20);
             this.neuronCountBox3.TabIndex = 14;
@@ -176,7 +194,7 @@
             // neuronCountLabel3
             // 
             this.neuronCountLabel3.AutoSize = true;
-            this.neuronCountLabel3.Location = new System.Drawing.Point(13, 267);
+            this.neuronCountLabel3.Location = new System.Drawing.Point(15, 100);
             this.neuronCountLabel3.Name = "neuronCountLabel3";
             this.neuronCountLabel3.Size = new System.Drawing.Size(111, 13);
             this.neuronCountLabel3.TabIndex = 13;
@@ -184,9 +202,10 @@
             // 
             // startBtn
             // 
-            this.startBtn.Location = new System.Drawing.Point(45, 371);
+            this.startBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.startBtn.Location = new System.Drawing.Point(50, 55);
             this.startBtn.Name = "startBtn";
-            this.startBtn.Size = new System.Drawing.Size(157, 45);
+            this.startBtn.Size = new System.Drawing.Size(157, 26);
             this.startBtn.TabIndex = 15;
             this.startBtn.Text = "Train";
             this.startBtn.UseVisualStyleBackColor = true;
@@ -241,6 +260,8 @@
             // 
             // predictionGroupBox
             // 
+            this.predictionGroupBox.Controls.Add(this.textBox1);
+            this.predictionGroupBox.Controls.Add(this.RSILabel);
             this.predictionGroupBox.Controls.Add(this.todayValuesLabel);
             this.predictionGroupBox.Controls.Add(this.predictionRespone);
             this.predictionGroupBox.Controls.Add(this.closeTextBox);
@@ -253,20 +274,39 @@
             this.predictionGroupBox.Controls.Add(this.openLabel);
             this.predictionGroupBox.Controls.Add(this.openTextBox);
             this.predictionGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.predictionGroupBox.Location = new System.Drawing.Point(270, 220);
+            this.predictionGroupBox.Location = new System.Drawing.Point(270, 232);
             this.predictionGroupBox.Name = "predictionGroupBox";
-            this.predictionGroupBox.Size = new System.Drawing.Size(200, 277);
+            this.predictionGroupBox.Size = new System.Drawing.Size(200, 313);
             this.predictionGroupBox.TabIndex = 18;
             this.predictionGroupBox.TabStop = false;
             this.predictionGroupBox.Text = "Tomorrow prediction";
             // 
+            // textBox1
+            // 
+            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.textBox1.Location = new System.Drawing.Point(79, 165);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(100, 20);
+            this.textBox1.TabIndex = 29;
+            // 
+            // RSILabel
+            // 
+            this.RSILabel.AutoSize = true;
+            this.RSILabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.RSILabel.Location = new System.Drawing.Point(19, 170);
+            this.RSILabel.Name = "RSILabel";
+            this.RSILabel.Size = new System.Drawing.Size(25, 13);
+            this.RSILabel.TabIndex = 28;
+            this.RSILabel.Text = "RSI";
+            // 
             // todayValuesLabel
             // 
             this.todayValuesLabel.AutoSize = true;
-            this.todayValuesLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.todayValuesLabel.Location = new System.Drawing.Point(23, 30);
+            this.todayValuesLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.todayValuesLabel.Location = new System.Drawing.Point(19, 42);
             this.todayValuesLabel.Name = "todayValuesLabel";
-            this.todayValuesLabel.Size = new System.Drawing.Size(72, 13);
+            this.todayValuesLabel.Size = new System.Drawing.Size(80, 15);
             this.todayValuesLabel.TabIndex = 27;
             this.todayValuesLabel.Text = "Today Values";
             // 
@@ -277,7 +317,7 @@
             this.predictionRespone.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.predictionRespone.FormattingEnabled = true;
             this.predictionRespone.ItemHeight = 15;
-            this.predictionRespone.Location = new System.Drawing.Point(26, 216);
+            this.predictionRespone.Location = new System.Drawing.Point(22, 264);
             this.predictionRespone.Name = "predictionRespone";
             this.predictionRespone.Size = new System.Drawing.Size(157, 45);
             this.predictionRespone.TabIndex = 1;
@@ -285,7 +325,7 @@
             // closeTextBox
             // 
             this.closeTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.closeTextBox.Location = new System.Drawing.Point(83, 134);
+            this.closeTextBox.Location = new System.Drawing.Point(79, 139);
             this.closeTextBox.Multiline = true;
             this.closeTextBox.Name = "closeTextBox";
             this.closeTextBox.Size = new System.Drawing.Size(100, 20);
@@ -296,7 +336,7 @@
             // 
             this.closeLabel.AutoSize = true;
             this.closeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.closeLabel.Location = new System.Drawing.Point(23, 134);
+            this.closeLabel.Location = new System.Drawing.Point(19, 144);
             this.closeLabel.Name = "closeLabel";
             this.closeLabel.Size = new System.Drawing.Size(33, 13);
             this.closeLabel.TabIndex = 25;
@@ -306,7 +346,7 @@
             // 
             this.highLabel.AutoSize = true;
             this.highLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.highLabel.Location = new System.Drawing.Point(23, 108);
+            this.highLabel.Location = new System.Drawing.Point(19, 118);
             this.highLabel.Name = "highLabel";
             this.highLabel.Size = new System.Drawing.Size(29, 13);
             this.highLabel.TabIndex = 23;
@@ -315,7 +355,7 @@
             // highTextBox
             // 
             this.highTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.highTextBox.Location = new System.Drawing.Point(83, 108);
+            this.highTextBox.Location = new System.Drawing.Point(79, 113);
             this.highTextBox.Multiline = true;
             this.highTextBox.Name = "highTextBox";
             this.highTextBox.Size = new System.Drawing.Size(100, 20);
@@ -326,7 +366,7 @@
             // 
             this.lowTextBox.AcceptsReturn = true;
             this.lowTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lowTextBox.Location = new System.Drawing.Point(83, 82);
+            this.lowTextBox.Location = new System.Drawing.Point(79, 87);
             this.lowTextBox.Multiline = true;
             this.lowTextBox.Name = "lowTextBox";
             this.lowTextBox.Size = new System.Drawing.Size(100, 20);
@@ -336,9 +376,9 @@
             // predictButton
             // 
             this.predictButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.predictButton.Location = new System.Drawing.Point(26, 165);
+            this.predictButton.Location = new System.Drawing.Point(22, 232);
             this.predictButton.Name = "predictButton";
-            this.predictButton.Size = new System.Drawing.Size(157, 45);
+            this.predictButton.Size = new System.Drawing.Size(157, 26);
             this.predictButton.TabIndex = 19;
             this.predictButton.Text = "Predict away!";
             this.predictButton.UseVisualStyleBackColor = true;
@@ -348,7 +388,7 @@
             // 
             this.lowLabel.AutoSize = true;
             this.lowLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lowLabel.Location = new System.Drawing.Point(23, 82);
+            this.lowLabel.Location = new System.Drawing.Point(19, 92);
             this.lowLabel.Name = "lowLabel";
             this.lowLabel.Size = new System.Drawing.Size(27, 13);
             this.lowLabel.TabIndex = 21;
@@ -358,7 +398,7 @@
             // 
             this.openLabel.AutoSize = true;
             this.openLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.openLabel.Location = new System.Drawing.Point(23, 56);
+            this.openLabel.Location = new System.Drawing.Point(19, 66);
             this.openLabel.Name = "openLabel";
             this.openLabel.Size = new System.Drawing.Size(33, 13);
             this.openLabel.TabIndex = 19;
@@ -367,7 +407,7 @@
             // openTextBox
             // 
             this.openTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.openTextBox.Location = new System.Drawing.Point(83, 56);
+            this.openTextBox.Location = new System.Drawing.Point(79, 61);
             this.openTextBox.Multiline = true;
             this.openTextBox.Name = "openTextBox";
             this.openTextBox.Size = new System.Drawing.Size(100, 20);
@@ -377,7 +417,8 @@
             // meanSSELabel
             // 
             this.meanSSELabel.AutoSize = true;
-            this.meanSSELabel.Location = new System.Drawing.Point(12, 436);
+            this.meanSSELabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.meanSSELabel.Location = new System.Drawing.Point(12, 97);
             this.meanSSELabel.Name = "meanSSELabel";
             this.meanSSELabel.Size = new System.Drawing.Size(102, 13);
             this.meanSSELabel.TabIndex = 19;
@@ -386,15 +427,15 @@
             // meanSSEValue
             // 
             this.meanSSEValue.AutoSize = true;
-            this.meanSSEValue.Location = new System.Drawing.Point(126, 436);
+            this.meanSSEValue.Location = new System.Drawing.Point(133, 97);
             this.meanSSEValue.Name = "meanSSEValue";
-            this.meanSSEValue.Size = new System.Drawing.Size(0, 13);
+            this.meanSSEValue.Size = new System.Drawing.Size(0, 15);
             this.meanSSEValue.TabIndex = 20;
             // 
             // learningFunctionLabel
             // 
             this.learningFunctionLabel.AutoSize = true;
-            this.learningFunctionLabel.Location = new System.Drawing.Point(13, 91);
+            this.learningFunctionLabel.Location = new System.Drawing.Point(15, 79);
             this.learningFunctionLabel.Name = "learningFunctionLabel";
             this.learningFunctionLabel.Size = new System.Drawing.Size(92, 13);
             this.learningFunctionLabel.TabIndex = 21;
@@ -403,14 +444,14 @@
             // functionBox
             // 
             this.functionBox.FormattingEnabled = true;
-            this.functionBox.Location = new System.Drawing.Point(129, 88);
+            this.functionBox.Location = new System.Drawing.Point(139, 76);
             this.functionBox.Name = "functionBox";
             this.functionBox.Size = new System.Drawing.Size(100, 21);
             this.functionBox.TabIndex = 22;
             // 
             // finalLearningRateBox
             // 
-            this.finalLearningRateBox.Location = new System.Drawing.Point(129, 62);
+            this.finalLearningRateBox.Location = new System.Drawing.Point(139, 50);
             this.finalLearningRateBox.Name = "finalLearningRateBox";
             this.finalLearningRateBox.Size = new System.Drawing.Size(100, 20);
             this.finalLearningRateBox.TabIndex = 24;
@@ -418,38 +459,135 @@
             // finalLearningRateLabel
             // 
             this.finalLearningRateLabel.AutoSize = true;
-            this.finalLearningRateLabel.Location = new System.Drawing.Point(13, 65);
+            this.finalLearningRateLabel.Location = new System.Drawing.Point(15, 53);
             this.finalLearningRateLabel.Name = "finalLearningRateLabel";
             this.finalLearningRateLabel.Size = new System.Drawing.Size(99, 13);
             this.finalLearningRateLabel.TabIndex = 23;
             this.finalLearningRateLabel.Text = "Final Learning Rate";
             // 
+            // learnGroupBox
+            // 
+            this.learnGroupBox.Controls.Add(this.finalLearningRateBox);
+            this.learnGroupBox.Controls.Add(this.initalLearningRateLabel);
+            this.learnGroupBox.Controls.Add(this.finalLearningRateLabel);
+            this.learnGroupBox.Controls.Add(this.initialLearningRateBox);
+            this.learnGroupBox.Controls.Add(this.functionBox);
+            this.learnGroupBox.Controls.Add(this.learningFunctionLabel);
+            this.learnGroupBox.Location = new System.Drawing.Point(8, 27);
+            this.learnGroupBox.Name = "learnGroupBox";
+            this.learnGroupBox.Size = new System.Drawing.Size(256, 119);
+            this.learnGroupBox.TabIndex = 1;
+            this.learnGroupBox.TabStop = false;
+            this.learnGroupBox.Text = "Network Learn Ability";
+            // 
+            // structureGroupBox
+            // 
+            this.structureGroupBox.Controls.Add(this.hiddenLayerCountBox);
+            this.structureGroupBox.Controls.Add(this.hiddenLayerCountLabel);
+            this.structureGroupBox.Controls.Add(this.neuronCountLabel1);
+            this.structureGroupBox.Controls.Add(this.neuronCountBox1);
+            this.structureGroupBox.Controls.Add(this.neuronCountLabel2);
+            this.structureGroupBox.Controls.Add(this.neuronCountBox2);
+            this.structureGroupBox.Controls.Add(this.neuronCountLabel3);
+            this.structureGroupBox.Controls.Add(this.neuronCountBox3);
+            this.structureGroupBox.Location = new System.Drawing.Point(8, 158);
+            this.structureGroupBox.Name = "structureGroupBox";
+            this.structureGroupBox.Size = new System.Drawing.Size(256, 131);
+            this.structureGroupBox.TabIndex = 1;
+            this.structureGroupBox.TabStop = false;
+            this.structureGroupBox.Text = "Network Structure";
+            // 
+            // initializationGroupBox
+            // 
+            this.initializationGroupBox.Controls.Add(this.initializerParameter2Box);
+            this.initializationGroupBox.Controls.Add(this.initializerParameter2Label);
+            this.initializationGroupBox.Controls.Add(this.initializerParameter1Box);
+            this.initializationGroupBox.Controls.Add(this.initializerParameter1Label);
+            this.initializationGroupBox.Controls.Add(this.initializerLabel);
+            this.initializationGroupBox.Controls.Add(this.initializerBox);
+            this.initializationGroupBox.Location = new System.Drawing.Point(8, 295);
+            this.initializationGroupBox.Name = "initializationGroupBox";
+            this.initializationGroupBox.Size = new System.Drawing.Size(256, 107);
+            this.initializationGroupBox.TabIndex = 21;
+            this.initializationGroupBox.TabStop = false;
+            this.initializationGroupBox.Text = "Network Initialization";
+            // 
+            // initializerParameter2Box
+            // 
+            this.initializerParameter2Box.Location = new System.Drawing.Point(139, 78);
+            this.initializerParameter2Box.Name = "initializerParameter2Box";
+            this.initializerParameter2Box.Size = new System.Drawing.Size(100, 20);
+            this.initializerParameter2Box.TabIndex = 29;
+            this.initializerParameter2Box.TextChanged += new System.EventHandler(this.initializerParameter2Box_TextChanged);
+            // 
+            // initializerParameter2Label
+            // 
+            this.initializerParameter2Label.AutoSize = true;
+            this.initializerParameter2Label.Location = new System.Drawing.Point(15, 81);
+            this.initializerParameter2Label.Name = "initializerParameter2Label";
+            this.initializerParameter2Label.Size = new System.Drawing.Size(0, 13);
+            this.initializerParameter2Label.TabIndex = 28;
+            // 
+            // initializerParameter1Box
+            // 
+            this.initializerParameter1Box.Location = new System.Drawing.Point(140, 52);
+            this.initializerParameter1Box.Name = "initializerParameter1Box";
+            this.initializerParameter1Box.Size = new System.Drawing.Size(100, 20);
+            this.initializerParameter1Box.TabIndex = 27;
+            this.initializerParameter1Box.TextChanged += new System.EventHandler(this.initializerParameter1Box_TextChanged);
+            // 
+            // initializerParameter1Label
+            // 
+            this.initializerParameter1Label.AutoSize = true;
+            this.initializerParameter1Label.Location = new System.Drawing.Point(16, 55);
+            this.initializerParameter1Label.Name = "initializerParameter1Label";
+            this.initializerParameter1Label.Size = new System.Drawing.Size(0, 13);
+            this.initializerParameter1Label.TabIndex = 26;
+            // 
+            // initializerLabel
+            // 
+            this.initializerLabel.AutoSize = true;
+            this.initializerLabel.Location = new System.Drawing.Point(15, 28);
+            this.initializerLabel.Name = "initializerLabel";
+            this.initializerLabel.Size = new System.Drawing.Size(91, 13);
+            this.initializerLabel.TabIndex = 15;
+            this.initializerLabel.Text = "Initializer Function";
+            // 
+            // initializerBox
+            // 
+            this.initializerBox.FormattingEnabled = true;
+            this.initializerBox.Location = new System.Drawing.Point(139, 25);
+            this.initializerBox.Name = "initializerBox";
+            this.initializerBox.Size = new System.Drawing.Size(101, 21);
+            this.initializerBox.TabIndex = 25;
+            this.initializerBox.SelectedIndexChanged += new System.EventHandler(this.initializerBox_SelectedIndexChanged);
+            // 
+            // trainGroup
+            // 
+            this.trainGroup.Controls.Add(this.startBtn);
+            this.trainGroup.Controls.Add(this.trainingIterationsBox);
+            this.trainGroup.Controls.Add(this.meanSSELabel);
+            this.trainGroup.Controls.Add(this.trainingIterationsLabel);
+            this.trainGroup.Controls.Add(this.meanSSEValue);
+            this.trainGroup.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.trainGroup.Location = new System.Drawing.Point(12, 409);
+            this.trainGroup.Name = "trainGroup";
+            this.trainGroup.Size = new System.Drawing.Size(252, 136);
+            this.trainGroup.TabIndex = 22;
+            this.trainGroup.TabStop = false;
+            this.trainGroup.Text = "Network Training";
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1159, 509);
-            this.Controls.Add(this.finalLearningRateBox);
-            this.Controls.Add(this.finalLearningRateLabel);
-            this.Controls.Add(this.functionBox);
-            this.Controls.Add(this.learningFunctionLabel);
-            this.Controls.Add(this.meanSSEValue);
-            this.Controls.Add(this.meanSSELabel);
+            this.ClientSize = new System.Drawing.Size(1159, 557);
+            this.Controls.Add(this.trainGroup);
+            this.Controls.Add(this.initializationGroupBox);
+            this.Controls.Add(this.structureGroupBox);
+            this.Controls.Add(this.learnGroupBox);
             this.Controls.Add(this.predictionGroupBox);
             this.Controls.Add(this.filesGroupBox);
-            this.Controls.Add(this.startBtn);
-            this.Controls.Add(this.neuronCountBox3);
-            this.Controls.Add(this.neuronCountLabel3);
-            this.Controls.Add(this.neuronCountBox2);
-            this.Controls.Add(this.neuronCountLabel2);
-            this.Controls.Add(this.neuronCountBox1);
-            this.Controls.Add(this.neuronCountLabel1);
-            this.Controls.Add(this.hiddenLayerCountBox);
-            this.Controls.Add(this.hiddenLayerCountLabel);
-            this.Controls.Add(this.trainingIterationsBox);
-            this.Controls.Add(this.trainingIterationsLabel);
-            this.Controls.Add(this.initialLearningRateBox);
-            this.Controls.Add(this.initalLearningRateLabel);
             this.Controls.Add(this.graph);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
@@ -461,6 +599,14 @@
             this.filesGroupBox.ResumeLayout(false);
             this.predictionGroupBox.ResumeLayout(false);
             this.predictionGroupBox.PerformLayout();
+            this.learnGroupBox.ResumeLayout(false);
+            this.learnGroupBox.PerformLayout();
+            this.structureGroupBox.ResumeLayout(false);
+            this.structureGroupBox.PerformLayout();
+            this.initializationGroupBox.ResumeLayout(false);
+            this.initializationGroupBox.PerformLayout();
+            this.trainGroup.ResumeLayout(false);
+            this.trainGroup.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -505,6 +651,18 @@
         private System.Windows.Forms.ComboBox functionBox;
         private System.Windows.Forms.TextBox finalLearningRateBox;
         private System.Windows.Forms.Label finalLearningRateLabel;
+        private System.Windows.Forms.GroupBox learnGroupBox;
+        private System.Windows.Forms.GroupBox structureGroupBox;
+        private System.Windows.Forms.GroupBox initializationGroupBox;
+        private System.Windows.Forms.Label initializerLabel;
+        private System.Windows.Forms.ComboBox initializerBox;
+        private System.Windows.Forms.TextBox initializerParameter2Box;
+        private System.Windows.Forms.Label initializerParameter2Label;
+        private System.Windows.Forms.TextBox initializerParameter1Box;
+        private System.Windows.Forms.Label initializerParameter1Label;
+        private System.Windows.Forms.GroupBox trainGroup;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label RSILabel;
     }
 }
 

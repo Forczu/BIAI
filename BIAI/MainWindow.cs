@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using NeuronDotNet;
 using NeuronDotNet.Core;
 using NeuronDotNet.Core.Backpropagation;
+using NeuronDotNet.Core.Initializers;
 using NeuronDotNet.Core.LearningRateFunctions;
 using ZedGraph;
 using Ideafixxxer.CsvParser;
@@ -20,7 +21,7 @@ namespace BIAI
 {
     public partial class MainWindow : Form
     {
-        #region WARTOŚCI DOMYŚLNE
+        #region Wartości domyślne
         /// <summary>
         /// domyślna liczba cykli treningowych
         /// </summary>
@@ -41,17 +42,21 @@ namespace BIAI
         /// Domyślna wartość dzisiejszego kursu
         /// </summary>
         private readonly double defaultTodayRate = 1.00000d;
+        /// <summary>
+        /// Domyślna wartość parametrów initializatora
+        /// </summary>
+        private readonly double defaultInitializerParameter = 0.0d;
         #endregion
 
-        #region WARTOŚCI STAŁE
+        #region Wartości stałe
         /// <summary>
         /// minimalna liczba wartw pośrednich
         /// </summary>
-        private readonly int HIDDEN_LAYER_MIN_COUNT = 1;
+        private const int HIDDEN_LAYER_MIN_COUNT = 1;
         /// <summary>
         /// maksymalna liczba wartw pośrednich
         /// </summary>
-        private readonly int HIDDEN_LAYER_MAX_COUNT = 3;
+        private const int HIDDEN_LAYER_MAX_COUNT = 3;
         /// <summary>
         /// Liczba neuronów w warstywie wejściowej,
         /// musi być równa liczbie danych wejściowych
@@ -60,9 +65,12 @@ namespace BIAI
         /// <summary>
         /// Możliwe netody nauki
         /// </summary>
-        private readonly string[] function = { "None", "ExpFunction", "HyperFunction", "LinearFunction" };
+        private readonly string[] function = { "None", "Expotential", "Hyperbolic", "Linear" };
+        /// <summary>
+        /// Może sposoby inicjalizacji sieci
+        /// </summary>
+        private readonly string[] initializer = { "None", "Constant", "NgyuenWidrow", "NormalizedRandom", "Random", "Zero" };
         #endregion
-
 
         private BackpropagationNetwork ourNetwork;
         private double[] errorList;
@@ -73,6 +81,8 @@ namespace BIAI
 
         private CsvParser parser;
         private List<string[][]> inputData;
+
+        private double initializerParameter1 = 0.0d, initializerParameter2 = 0.0d;
 
         #region Wartości do wstępnego przetworzenia
         /// <summary>
@@ -90,7 +100,7 @@ namespace BIAI
         #endregion
 
 
-        #region
+        #region Wartości dzisiejszego kursu
         /// <summary>
         /// Wartości dzisiejszego kursu, jako podstawa do obliczenia jutrzejszego
         /// </summary>
@@ -127,6 +137,12 @@ namespace BIAI
                 this.functionBox.Items.Add(func);
 	        }
             this.functionBox.Text = this.functionBox.Items[0].ToString();
+            // rodzaje inicjalizatorów
+            foreach (string i in initializer)
+            {
+                this.initializerBox.Items.Add(i);
+            }
+            this.initializerBox.Text = this.initializerBox.Items[0].ToString();
         }
 
         /// <summary>
@@ -149,35 +165,10 @@ namespace BIAI
             InitGraph();
 
             // Utworzenie sieci neuronowej
-            LinearLayer inputLayer = new LinearLayer(INPUT_NUMBER);
-            List<SigmoidLayer> hiddenLayerList = new List<SigmoidLayer>();
-            for (int i = 0; i < hiddenLayerCount; i++)
-            {
-                hiddenLayerList.Add(new SigmoidLayer(neuronCountList[i]));
-            }
-            SigmoidLayer outputLayer = new SigmoidLayer(1);
-            new BackpropagationConnector(inputLayer, hiddenLayerList[0]);
-            for (int i = 1; i < hiddenLayerCount; i++)
-            {
-                new BackpropagationConnector(hiddenLayerList[i - 1], hiddenLayerList[i]);
-            }
-            new BackpropagationConnector(hiddenLayerList[hiddenLayerCount - 1], outputLayer);
-            this.ourNetwork = new BackpropagationNetwork(inputLayer, outputLayer);
-            switch (this.functionBox.Text.ToString())
-            {
-                case "None":
-                    this.ourNetwork.SetLearningRate(initialLearningRate, finalLearningRate);
-                    break;
-                case "ExpFunction":
-                    this.ourNetwork.SetLearningRate(new ExponentialFunction(initialLearningRate, finalLearningRate));
-                    break;
-                case "HyperFunction":
-                    this.ourNetwork.SetLearningRate(new HyperbolicFunction(initialLearningRate, finalLearningRate));
-                    break;
-                case "LinearFunction":
-                    this.ourNetwork.SetLearningRate(new LinearFunction(initialLearningRate, finalLearningRate));
-                    break;
-            }
+            this.CreateNetwork();
+
+            // ustawienie mocy poznawczej
+            this.SetNetworkLearningRate();
 
             // zestaw treningowy XD *doxus face*
             TrainingSet trainingSet = new TrainingSet(4, 1);
@@ -259,6 +250,8 @@ namespace BIAI
             this.lowTextBox.Text = todayLow.ToString("0.00000");
             this.highTextBox.Text = todayHigh.ToString("0.00000");
             this.openTextBox.Text = todayOpen.ToString("0.00000");
+            this.initializerParameter1Box.Text = initializerParameter1.ToString();
+            this.initializerParameter2Box.Text = initializerParameter2.ToString();
         }
 
         private void InitGraph()
@@ -412,6 +405,7 @@ namespace BIAI
 
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
+                this.filesListBox.Items.Clear();
                 try
                 {
                     foreach (string filename in openFileDialog.FileNames)
@@ -537,6 +531,134 @@ namespace BIAI
             {
                 todayOpen = defaultValue;
                 where(todayOpen.ToString("0.00000"));
+            }
+        }
+
+        /// <summary>
+        /// Wybór opcji inicjalizacji sieci
+        /// </summary>
+        private void initializerBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (this.initializerBox.Text.ToString())
+            {
+                case "None":
+                case "NormalizedRandom":
+                case "Zero":
+                default:
+                    this.initializerParameter1Box.Visible = false;
+                    this.initializerParameter2Box.Visible = false;
+                    this.initializerParameter1Label.Text = String.Empty;
+                    this.initializerParameter2Label.Text = String.Empty;
+                    break;
+                case "Constant":
+                    this.initializerParameter1Box.Visible = true;
+                    this.initializerParameter2Box.Visible = false;
+                    this.initializerParameter1Label.Text = "Constant";
+                    this.initializerParameter2Label.Text = String.Empty;
+                    break;
+                case "NgyuenWidrow":
+                    this.initializerParameter1Box.Visible = true;
+                    this.initializerParameter2Box.Visible = false;
+                    this.initializerParameter1Label.Text = "Output range";
+                    this.initializerParameter2Label.Text = String.Empty;
+                    break;
+                case "Random":
+                    this.initializerParameter1Box.Visible = true;
+                    this.initializerParameter2Box.Visible = true;
+                    this.initializerParameter1Label.Text = "Min limit";
+                    this.initializerParameter2Label.Text = "Max limit";
+                    break;
+            }
+            this.initializerParameter1 = this.initializerParameter2 = defaultInitializerParameter;
+        }
+
+        /// <summary>
+        /// Utworzenie sieci neuronowej - neuronów w warstwach
+        /// oraz zainicjalizowanie jej
+        /// </summary>
+        private void CreateNetwork()
+        {
+            // warstwa wejściowa
+            LinearLayer inputLayer = new LinearLayer(INPUT_NUMBER);
+            // lista warstw pośrednich
+            List<SigmoidLayer> hiddenLayerList = new List<SigmoidLayer>();
+            for (int i = 0; i < hiddenLayerCount; i++)
+            {
+                hiddenLayerList.Add(new SigmoidLayer(neuronCountList[i]));
+            }
+            // warstwa wyjściowa
+            SigmoidLayer outputLayer = new SigmoidLayer(1);
+            // wybór inicjalizatora połączeń
+            IInitializer initFunction;
+            switch (initializerBox.Text.ToString())
+            {
+                case "None": default:
+                    initFunction = null;
+                    break;
+                case "Constant":
+                    initFunction = new ConstantFunction(initializerParameter1);
+                    break;
+                case "NgyuenWidrow":
+                    initFunction = new NguyenWidrowFunction(initializerParameter1);
+                    break;
+                case "NormalizedRandom":
+                    initFunction = new NormalizedRandomFunction();
+                    break;
+                case "Random":
+                    initFunction = new RandomFunction(initializerParameter1, initializerParameter2);
+                    break;
+                case "Zero":
+                    initFunction = new ZeroFunction();
+                    break;
+            }
+            // połączenie warstw
+            new BackpropagationConnector(inputLayer, hiddenLayerList[0]).Initializer = initFunction;
+            for (int i = 1; i < hiddenLayerCount; i++)
+            {
+                new BackpropagationConnector(hiddenLayerList[i - 1], hiddenLayerList[i]).Initializer = initFunction;
+            }
+            new BackpropagationConnector(hiddenLayerList[hiddenLayerCount - 1], outputLayer).Initializer = initFunction;
+            
+            // przypisanie nowej sieci naszej
+            this.ourNetwork = new BackpropagationNetwork(inputLayer, outputLayer);
+        }
+
+        /// <summary>
+        /// Ustawienie naszej sieci odpowiedniej mocy poznawczej
+        /// </summary>
+        private void SetNetworkLearningRate()
+        {
+            switch (this.functionBox.Text.ToString())
+            {
+                case "None":
+                default:
+                    this.ourNetwork.SetLearningRate(initialLearningRate, finalLearningRate);
+                    break;
+                case "Expotential":
+                    this.ourNetwork.SetLearningRate(new ExponentialFunction(initialLearningRate, finalLearningRate));
+                    break;
+                case "Hyperbolic":
+                    this.ourNetwork.SetLearningRate(new HyperbolicFunction(initialLearningRate, finalLearningRate));
+                    break;
+                case "Linear":
+                    this.ourNetwork.SetLearningRate(new LinearFunction(initialLearningRate, finalLearningRate));
+                    break;
+            }
+        }
+
+        private void initializerParameter1Box_TextChanged(object sender, EventArgs e)
+        {
+            if (!double.TryParse(initializerParameter1Box.Text.Trim(), out initializerParameter1))
+            {
+                initializerParameter1 = 0.0d;
+            }
+        }
+
+        private void initializerParameter2Box_TextChanged(object sender, EventArgs e)
+        {
+            if (!double.TryParse(initializerParameter2Box.Text.Trim(), out initializerParameter2))
+            {
+                initializerParameter2 = 0.0d;
             }
         }
     }
