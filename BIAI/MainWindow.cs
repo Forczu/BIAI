@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using NeuronDotNet;
 using NeuronDotNet.Core;
 using NeuronDotNet.Core.Backpropagation;
+using NeuronDotNet.Core.LearningRateFunctions;
 using ZedGraph;
 using Ideafixxxer.CsvParser;
 using System.IO;
@@ -56,6 +57,10 @@ namespace BIAI
         /// musi być równa liczbie danych wejściowych
         /// </summary>
         private const int INPUT_NUMBER = 4;
+        /// <summary>
+        /// Możliwe netody nauki
+        /// </summary>
+        private readonly string[] function = { "None", "ExpFunction", "HyperFunction", "LinearFunction" };
         #endregion
 
 
@@ -64,7 +69,7 @@ namespace BIAI
         private int iterations;
         private int hiddenLayerCount;
         private List<int> neuronCountList;
-        private double learningRate;
+        private double initialLearningRate, finalLearningRate;
 
         private CsvParser parser;
         private List<string[][]> inputData;
@@ -102,7 +107,7 @@ namespace BIAI
             {
                 neuronCountList.Add(defaultNeuronCount);
             }
-            this.learningRate = defaultLearningRate;
+            this.initialLearningRate = this.finalLearningRate = defaultLearningRate;
             this.parser = new CsvParser();
             this.inputData = new List<string[][]>();
             // pamięć dla wartości z plików
@@ -116,6 +121,12 @@ namespace BIAI
             actualOpen = new List<double>();
             tomorrowClose = new List<double>();
             todayClose = todayHigh = todayLow = todayOpen = 1.00000;
+            // rodzaje metod nauki
+            foreach (string func in function)
+	        {
+                this.functionBox.Items.Add(func);
+	        }
+            this.functionBox.Text = this.functionBox.Items[0].ToString();
         }
 
         /// <summary>
@@ -128,7 +139,8 @@ namespace BIAI
 
             // ustawienie ich ponownie w textboxach w oknie
             trainingIterationsBox.Text = iterations.ToString();
-            learningRateBox.Text = learningRate.ToString();
+            initialLearningRateBox.Text = initialLearningRate.ToString();
+            finalLearningRateBox.Text = finalLearningRate.ToString();
             neuronCountBox1.Text = neuronCountList[0].ToString();
             neuronCountBox2.Text = neuronCountList[1].ToString();
             neuronCountBox3.Text = neuronCountList[2].ToString();
@@ -151,7 +163,21 @@ namespace BIAI
             }
             new BackpropagationConnector(hiddenLayerList[hiddenLayerCount - 1], outputLayer);
             this.ourNetwork = new BackpropagationNetwork(inputLayer, outputLayer);
-            this.ourNetwork.SetLearningRate(learningRate);
+            switch (this.functionBox.Text.ToString())
+            {
+                case "None":
+                    this.ourNetwork.SetLearningRate(initialLearningRate, finalLearningRate);
+                    break;
+                case "ExpFunction":
+                    this.ourNetwork.SetLearningRate(new ExponentialFunction(initialLearningRate, finalLearningRate));
+                    break;
+                case "HyperFunction":
+                    this.ourNetwork.SetLearningRate(new HyperbolicFunction(initialLearningRate, finalLearningRate));
+                    break;
+                case "LinearFunction":
+                    this.ourNetwork.SetLearningRate(new LinearFunction(initialLearningRate, finalLearningRate));
+                    break;
+            }
 
             // zestaw treningowy XD *doxus face*
             TrainingSet trainingSet = new TrainingSet(4, 1);
@@ -192,6 +218,8 @@ namespace BIAI
             {
                 indices[i] = i;
             }
+            ourNetwork.StopLearning();
+
             // narysowanie wykresu
             LineItem errorCurve = new LineItem("Differences", indices, errorList, Color.GreenYellow, SymbolType.None, 1.5f);
             graph.GraphPane.YAxis.Scale.Max = max;
@@ -221,7 +249,8 @@ namespace BIAI
         {
             InitGraph();
             this.trainingIterationsBox.Text = iterations.ToString();
-            this.learningRateBox.Text = learningRate.ToString();
+            this.initialLearningRateBox.Text = initialLearningRate.ToString();
+            this.finalLearningRateBox.Text = finalLearningRate.ToString();
             this.hiddenLayerCountBox.Text = hiddenLayerCount.ToString();
             this.neuronCountBox1.Text = neuronCountList[0].ToString();
             this.neuronCountBox2.Text = neuronCountList[1].ToString();
@@ -263,9 +292,13 @@ namespace BIAI
             {
                 iterations = defaultIterations;
             }
-            if (!double.TryParse(learningRateBox.Text.Trim(), out learningRate))
+            if (!double.TryParse(initialLearningRateBox.Text.Trim(), out initialLearningRate))
             {
-                learningRate = defaultLearningRate;
+                initialLearningRate = defaultLearningRate;
+            }
+            if (!double.TryParse(finalLearningRateBox.Text.Trim(), out finalLearningRate))
+            {
+                finalLearningRate = defaultLearningRate;
             }
             if (neuronCountBox3.Enabled)
             {
@@ -296,9 +329,13 @@ namespace BIAI
             {
                 iterations = 1;
             }
-            if (learningRate < 0.01)
+            if (initialLearningRate < 0.01)
             {
-                learningRate = 0.01;
+                initialLearningRate = 0.01;
+            }
+            if (finalLearningRate < 0.01)
+            {
+                finalLearningRate = 0.01;
             }
             for (int i = 0; i < HIDDEN_LAYER_MAX_COUNT; i++)
             {
