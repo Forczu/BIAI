@@ -470,6 +470,42 @@ namespace BIAI
         }
 
         /// <summary>
+        /// Obliczenie RSI
+        /// RSI = 100 - 100/(1+ sredni wzrost/sredni spadek)
+        /// </summary>
+        private double calculateRSI(string[][] input)
+        {
+            int periodNumber = input.Length;
+            double avg_growth = 0.0d, avg_fall = 0.0d;
+            List<double> growth = new List<double>();
+            List<double> fall = new List<double>();
+
+            // porównanie wartości Close pomiędzy kolejnymi dniami oraz obliczenie spadku/wzrostu
+            for (int i = 0; i < periodNumber - 2; ++i)
+            {
+                double value = Double.Parse(input[i][1], CultureInfo.InvariantCulture);
+                double value_next = Double.Parse(input[i + 1][1], CultureInfo.InvariantCulture);
+                if ((value - value_next) >= 0)
+                    fall.Add(value - value_next);
+                else
+                    fall.Add(0);
+                if ((value_next - value) >= 0)
+                    growth.Add(value_next - value);
+                else
+                    growth.Add(0);
+            }
+
+            //obliczanie sredniego spadku/wzrostu
+            avg_fall = fall.Average();
+            avg_growth = growth.Average();
+
+            //oblicznie RSI
+            double RSI = 100 - (100 / (1 + (avg_growth / avg_fall)));
+
+            return RSI;
+        }
+
+        /// <summary>
         /// Przycisk PREDICT AWAY!, próba przewidzenia jutrzejszego kursu walutowego
         /// </summary>
         private void predictButton_Click(object sender, EventArgs e)
