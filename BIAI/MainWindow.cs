@@ -61,7 +61,7 @@ namespace BIAI
         /// Liczba neuronów w warstywie wejściowej,
         /// musi być równa liczbie danych wejściowych
         /// </summary>
-        private const int INPUT_NUMBER = 4;
+        private const int INPUT_NUMBER = 5;
         /// <summary>
         /// Możliwe netody nauki
         /// </summary>
@@ -94,6 +94,10 @@ namespace BIAI
         /// </summary>
         List<double> actualClose, actualHigh, actualLow, actualOpen;
         /// <summary>
+        /// Wartość RSI dla kazdego pliku wejsciowego
+        /// </summary>
+        List<double> RSI;
+        /// <summary>
         /// Wartość do obliczenia przez sieć - czy jest mniejszy lub większy
         /// </summary>
         List<double> tomorrowClose;
@@ -104,7 +108,7 @@ namespace BIAI
         /// <summary>
         /// Wartości dzisiejszego kursu, jako podstawa do obliczenia jutrzejszego
         /// </summary>
-        double todayClose, todayHigh, todayLow, todayOpen;
+        double todayClose, todayHigh, todayLow, todayOpen, todayRSI;
         #endregion
 
         public MainWindow()
@@ -121,6 +125,7 @@ namespace BIAI
             this.parser = new CsvParser();
             this.inputData = new List<string[][]>();
             // pamięć dla wartości z plików
+            RSI = new List<double>();
             meanClose = new List<double>();
             meanHigh = new List<double>();
             meanLow = new List<double>();
@@ -130,7 +135,7 @@ namespace BIAI
             actualLow = new List<double>();
             actualOpen = new List<double>();
             tomorrowClose = new List<double>();
-            todayClose = todayHigh = todayLow = todayOpen = 1.00000;
+            todayClose = todayHigh = todayLow = todayOpen = todayRSI = 1.00000;
             // rodzaje metod nauki
             foreach (string func in function)
 	        {
@@ -171,7 +176,7 @@ namespace BIAI
             this.SetNetworkLearningRate();
 
             // zestaw treningowy XD *doxus face*
-            TrainingSet trainingSet = new TrainingSet(4, 1);
+            TrainingSet trainingSet = new TrainingSet(5, 1);
             
             // próbki treningowe
             // każda próbka powstaje na podstawie jednego pliku
@@ -182,7 +187,7 @@ namespace BIAI
                         // wektorem wejściowym są różnice między aktualną wartością, a średnią
                         new double[INPUT_NUMBER]
                         {
-                            actualClose[i] - meanClose[i], actualHigh[i] - meanHigh[i], actualLow[i] - meanLow[i], actualOpen[i] - meanOpen[i]
+                            actualClose[i] - meanClose[i], actualHigh[i] - meanHigh[i], actualLow[i] - meanLow[i], actualOpen[i] - meanOpen[i], RSI[i]
                         },
                         // wektorem wyjściowym jest różnica między jutrzejszym kursem zamknięcia, a aktualnym
                         new double[1]
@@ -231,6 +236,8 @@ namespace BIAI
             this.highTextBox.Text = todayHigh.ToString("0.00000");
             todayOpen = Double.Parse(lastValues[4], CultureInfo.InvariantCulture);
             this.openTextBox.Text = todayOpen.ToString("0.00000");
+            todayRSI = RSI.Last();
+            this.RSItextBox.Text = todayRSI.ToString("0.00");
         }
 
         /// <summary>
@@ -250,6 +257,7 @@ namespace BIAI
             this.lowTextBox.Text = todayLow.ToString("0.00000");
             this.highTextBox.Text = todayHigh.ToString("0.00000");
             this.openTextBox.Text = todayOpen.ToString("0.00000");
+            this.RSItextBox.Text = todayRSI.ToString("0.00000");
             this.initializerParameter1Box.Text = initializerParameter1.ToString();
             this.initializerParameter2Box.Text = initializerParameter2.ToString();
         }
@@ -435,6 +443,9 @@ namespace BIAI
             // dla każdego pliku wejściowego
             foreach (string[][] inputFile in inputData)
             {
+                //obliczenie RSi dla kazdego pliku wejsciowego
+                RSI.Add(calculateRSI(inputFile));
+
                 // obliczenie średnich każdego z kursów dziennych
                 meanClose.Add(this.CalculateEMA(inputFile, 1));
                 meanHigh.Add(this.CalculateEMA(inputFile, 2));
@@ -476,6 +487,8 @@ namespace BIAI
         private double calculateRSI(string[][] input)
         {
             int periodNumber = input.Length;
+            double alpha = 2.0d / (periodNumber + 1);
+            double denominator = 0.0d;
             double avg_growth = 0.0d, avg_fall = 0.0d;
             List<double> growth = new List<double>();
             List<double> fall = new List<double>();
@@ -483,21 +496,24 @@ namespace BIAI
             // porównanie wartości Close pomiędzy kolejnymi dniami oraz obliczenie spadku/wzrostu
             for (int i = 0; i < periodNumber - 2; ++i)
             {
+                double weight = Math.Pow(1 - alpha, periodNumber - i);
                 double value = Double.Parse(input[i][1], CultureInfo.InvariantCulture);
                 double value_next = Double.Parse(input[i + 1][1], CultureInfo.InvariantCulture);
                 if ((value - value_next) >= 0)
-                    fall.Add(value - value_next);
+                    fall.Add((value - value_next)*weight);
                 else
                     fall.Add(0);
                 if ((value_next - value) >= 0)
-                    growth.Add(value_next - value);
+                    growth.Add((value_next - value)*weight);
                 else
                     growth.Add(0);
+
+                denominator += weight;
             }
 
             //obliczanie sredniego spadku/wzrostu
-            avg_fall = fall.Average();
-            avg_growth = growth.Average();
+            avg_fall = fall.Sum()/denominator;
+            avg_growth = growth.Sum()/denominator;
 
             //oblicznie RSI
             double RSI = 100 - (100 / (1 + (avg_growth / avg_fall)));
@@ -520,15 +536,16 @@ namespace BIAI
                         Double.Parse(closeTextBox.Text, CultureInfo.InvariantCulture),
 					    Double.Parse(highTextBox.Text, CultureInfo.InvariantCulture),
                         Double.Parse(lowTextBox.Text, CultureInfo.InvariantCulture),
-                        Double.Parse(openTextBox.Text, CultureInfo.InvariantCulture)
+                        Double.Parse(openTextBox.Text, CultureInfo.InvariantCulture),
+                        Double.Parse(RSItextBox.Text, CultureInfo.InvariantCulture)
                     })[0];
-                if (result >= 0.0000000d)
+                if (result > 0.0d)
                 {
-                    this.predictionRespone.Items.Add("LARGER");
+                    this.predictionRespone.Items.Add("GREATER");
                 }
                 else
                 {
-                    this.predictionRespone.Items.Add("GREATER");
+                    this.predictionRespone.Items.Add("LOWER");
                 }
             }
         }

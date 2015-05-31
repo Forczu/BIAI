@@ -49,7 +49,7 @@
             this.filesGroupBox = new System.Windows.Forms.GroupBox();
             this.filesListBox = new System.Windows.Forms.ListBox();
             this.predictionGroupBox = new System.Windows.Forms.GroupBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.RSItextBox = new System.Windows.Forms.TextBox();
             this.RSILabel = new System.Windows.Forms.Label();
             this.todayValuesLabel = new System.Windows.Forms.Label();
             this.predictionRespone = new System.Windows.Forms.ListBox();
@@ -260,7 +260,7 @@
             // 
             // predictionGroupBox
             // 
-            this.predictionGroupBox.Controls.Add(this.textBox1);
+            this.predictionGroupBox.Controls.Add(this.RSItextBox);
             this.predictionGroupBox.Controls.Add(this.RSILabel);
             this.predictionGroupBox.Controls.Add(this.todayValuesLabel);
             this.predictionGroupBox.Controls.Add(this.predictionRespone);
@@ -281,14 +281,14 @@
             this.predictionGroupBox.TabStop = false;
             this.predictionGroupBox.Text = "Tomorrow prediction";
             // 
-            // textBox1
+            // RSItextBox
             // 
-            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.textBox1.Location = new System.Drawing.Point(79, 165);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 29;
+            this.RSItextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.RSItextBox.Location = new System.Drawing.Point(79, 165);
+            this.RSItextBox.Multiline = true;
+            this.RSItextBox.Name = "RSItextBox";
+            this.RSItextBox.Size = new System.Drawing.Size(100, 20);
+            this.RSItextBox.TabIndex = 29;
             // 
             // RSILabel
             // 
@@ -661,7 +661,7 @@
         private System.Windows.Forms.TextBox initializerParameter1Box;
         private System.Windows.Forms.Label initializerParameter1Label;
         private System.Windows.Forms.GroupBox trainGroup;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox RSItextBox;
         private System.Windows.Forms.Label RSILabel;
     }
 }
