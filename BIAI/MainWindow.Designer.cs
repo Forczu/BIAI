@@ -47,8 +47,15 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.filesGroupBox = new System.Windows.Forms.GroupBox();
+            this.dailyButton = new System.Windows.Forms.RadioButton();
+            this.weeklyButton = new System.Windows.Forms.RadioButton();
+            this.monthlyButton = new System.Windows.Forms.RadioButton();
+            this.sampleFormatLabel = new System.Windows.Forms.Label();
             this.filesListBox = new System.Windows.Forms.ListBox();
             this.predictionGroupBox = new System.Windows.Forms.GroupBox();
+            this.rsiDaysBox = new System.Windows.Forms.ComboBox();
+            this.rsiValueLabel = new System.Windows.Forms.Label();
+            this.rsiDaysLabel = new System.Windows.Forms.Label();
             this.RSItextBox = new System.Windows.Forms.TextBox();
             this.RSILabel = new System.Windows.Forms.Label();
             this.todayValuesLabel = new System.Windows.Forms.Label();
@@ -238,14 +245,64 @@
             // 
             // filesGroupBox
             // 
+            this.filesGroupBox.Controls.Add(this.dailyButton);
+            this.filesGroupBox.Controls.Add(this.weeklyButton);
+            this.filesGroupBox.Controls.Add(this.monthlyButton);
+            this.filesGroupBox.Controls.Add(this.sampleFormatLabel);
             this.filesGroupBox.Controls.Add(this.filesListBox);
             this.filesGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.filesGroupBox.Location = new System.Drawing.Point(270, 27);
             this.filesGroupBox.Name = "filesGroupBox";
-            this.filesGroupBox.Size = new System.Drawing.Size(200, 187);
+            this.filesGroupBox.Size = new System.Drawing.Size(200, 119);
             this.filesGroupBox.TabIndex = 17;
             this.filesGroupBox.TabStop = false;
-            this.filesGroupBox.Text = "Files for Training";
+            this.filesGroupBox.Text = "File for Training";
+            // 
+            // dailyButton
+            // 
+            this.dailyButton.AutoSize = true;
+            this.dailyButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.dailyButton.Location = new System.Drawing.Point(146, 90);
+            this.dailyButton.Name = "dailyButton";
+            this.dailyButton.Size = new System.Drawing.Size(48, 17);
+            this.dailyButton.TabIndex = 4;
+            this.dailyButton.TabStop = true;
+            this.dailyButton.Text = "Daily";
+            this.dailyButton.UseVisualStyleBackColor = true;
+            // 
+            // weeklyButton
+            // 
+            this.weeklyButton.AutoSize = true;
+            this.weeklyButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.weeklyButton.Location = new System.Drawing.Point(77, 90);
+            this.weeklyButton.Name = "weeklyButton";
+            this.weeklyButton.Size = new System.Drawing.Size(61, 17);
+            this.weeklyButton.TabIndex = 3;
+            this.weeklyButton.TabStop = true;
+            this.weeklyButton.Text = "Weekly";
+            this.weeklyButton.UseVisualStyleBackColor = true;
+            // 
+            // monthlyButton
+            // 
+            this.monthlyButton.AutoSize = true;
+            this.monthlyButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.monthlyButton.Location = new System.Drawing.Point(9, 90);
+            this.monthlyButton.Name = "monthlyButton";
+            this.monthlyButton.Size = new System.Drawing.Size(62, 17);
+            this.monthlyButton.TabIndex = 2;
+            this.monthlyButton.TabStop = true;
+            this.monthlyButton.Text = "Monthly";
+            this.monthlyButton.UseVisualStyleBackColor = true;
+            // 
+            // sampleFormatLabel
+            // 
+            this.sampleFormatLabel.AutoSize = true;
+            this.sampleFormatLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.sampleFormatLabel.Location = new System.Drawing.Point(6, 73);
+            this.sampleFormatLabel.Name = "sampleFormatLabel";
+            this.sampleFormatLabel.Size = new System.Drawing.Size(77, 13);
+            this.sampleFormatLabel.TabIndex = 1;
+            this.sampleFormatLabel.Text = "Sample Format";
             // 
             // filesListBox
             // 
@@ -255,11 +312,14 @@
             this.filesListBox.ItemHeight = 16;
             this.filesListBox.Location = new System.Drawing.Point(6, 22);
             this.filesListBox.Name = "filesListBox";
-            this.filesListBox.Size = new System.Drawing.Size(188, 144);
+            this.filesListBox.Size = new System.Drawing.Size(188, 48);
             this.filesListBox.TabIndex = 0;
             // 
             // predictionGroupBox
             // 
+            this.predictionGroupBox.Controls.Add(this.rsiDaysBox);
+            this.predictionGroupBox.Controls.Add(this.rsiValueLabel);
+            this.predictionGroupBox.Controls.Add(this.rsiDaysLabel);
             this.predictionGroupBox.Controls.Add(this.RSItextBox);
             this.predictionGroupBox.Controls.Add(this.RSILabel);
             this.predictionGroupBox.Controls.Add(this.todayValuesLabel);
@@ -281,10 +341,40 @@
             this.predictionGroupBox.TabStop = false;
             this.predictionGroupBox.Text = "Tomorrow prediction";
             // 
+            // rsiDaysBox
+            // 
+            this.rsiDaysBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.rsiDaysBox.FormattingEnabled = true;
+            this.rsiDaysBox.Location = new System.Drawing.Point(77, 177);
+            this.rsiDaysBox.Name = "rsiDaysBox";
+            this.rsiDaysBox.Size = new System.Drawing.Size(98, 21);
+            this.rsiDaysBox.TabIndex = 33;
+            this.rsiDaysBox.SelectedIndexChanged += new System.EventHandler(this.rsiDaysBox_SelectedIndexChanged);
+            // 
+            // rsiValueLabel
+            // 
+            this.rsiValueLabel.AutoSize = true;
+            this.rsiValueLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.rsiValueLabel.Location = new System.Drawing.Point(19, 207);
+            this.rsiValueLabel.Name = "rsiValueLabel";
+            this.rsiValueLabel.Size = new System.Drawing.Size(34, 13);
+            this.rsiValueLabel.TabIndex = 32;
+            this.rsiValueLabel.Text = "Value";
+            // 
+            // rsiDaysLabel
+            // 
+            this.rsiDaysLabel.AutoSize = true;
+            this.rsiDaysLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.rsiDaysLabel.Location = new System.Drawing.Point(19, 180);
+            this.rsiDaysLabel.Name = "rsiDaysLabel";
+            this.rsiDaysLabel.Size = new System.Drawing.Size(56, 13);
+            this.rsiDaysLabel.TabIndex = 30;
+            this.rsiDaysLabel.Text = "Since Day";
+            // 
             // RSItextBox
             // 
             this.RSItextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.RSItextBox.Location = new System.Drawing.Point(79, 165);
+            this.RSItextBox.Location = new System.Drawing.Point(77, 202);
             this.RSItextBox.Multiline = true;
             this.RSItextBox.Name = "RSItextBox";
             this.RSItextBox.Size = new System.Drawing.Size(100, 20);
@@ -293,10 +383,10 @@
             // RSILabel
             // 
             this.RSILabel.AutoSize = true;
-            this.RSILabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.RSILabel.Location = new System.Drawing.Point(19, 170);
+            this.RSILabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.RSILabel.Location = new System.Drawing.Point(19, 155);
             this.RSILabel.Name = "RSILabel";
-            this.RSILabel.Size = new System.Drawing.Size(25, 13);
+            this.RSILabel.Size = new System.Drawing.Size(27, 15);
             this.RSILabel.TabIndex = 28;
             this.RSILabel.Text = "RSI";
             // 
@@ -304,7 +394,7 @@
             // 
             this.todayValuesLabel.AutoSize = true;
             this.todayValuesLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.todayValuesLabel.Location = new System.Drawing.Point(19, 42);
+            this.todayValuesLabel.Location = new System.Drawing.Point(19, 26);
             this.todayValuesLabel.Name = "todayValuesLabel";
             this.todayValuesLabel.Size = new System.Drawing.Size(80, 15);
             this.todayValuesLabel.TabIndex = 27;
@@ -325,7 +415,7 @@
             // closeTextBox
             // 
             this.closeTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.closeTextBox.Location = new System.Drawing.Point(79, 139);
+            this.closeTextBox.Location = new System.Drawing.Point(79, 123);
             this.closeTextBox.Multiline = true;
             this.closeTextBox.Name = "closeTextBox";
             this.closeTextBox.Size = new System.Drawing.Size(100, 20);
@@ -336,7 +426,7 @@
             // 
             this.closeLabel.AutoSize = true;
             this.closeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.closeLabel.Location = new System.Drawing.Point(19, 144);
+            this.closeLabel.Location = new System.Drawing.Point(19, 128);
             this.closeLabel.Name = "closeLabel";
             this.closeLabel.Size = new System.Drawing.Size(33, 13);
             this.closeLabel.TabIndex = 25;
@@ -346,7 +436,7 @@
             // 
             this.highLabel.AutoSize = true;
             this.highLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.highLabel.Location = new System.Drawing.Point(19, 118);
+            this.highLabel.Location = new System.Drawing.Point(19, 102);
             this.highLabel.Name = "highLabel";
             this.highLabel.Size = new System.Drawing.Size(29, 13);
             this.highLabel.TabIndex = 23;
@@ -355,7 +445,7 @@
             // highTextBox
             // 
             this.highTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.highTextBox.Location = new System.Drawing.Point(79, 113);
+            this.highTextBox.Location = new System.Drawing.Point(79, 97);
             this.highTextBox.Multiline = true;
             this.highTextBox.Name = "highTextBox";
             this.highTextBox.Size = new System.Drawing.Size(100, 20);
@@ -366,7 +456,7 @@
             // 
             this.lowTextBox.AcceptsReturn = true;
             this.lowTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lowTextBox.Location = new System.Drawing.Point(79, 87);
+            this.lowTextBox.Location = new System.Drawing.Point(79, 71);
             this.lowTextBox.Multiline = true;
             this.lowTextBox.Name = "lowTextBox";
             this.lowTextBox.Size = new System.Drawing.Size(100, 20);
@@ -388,7 +478,7 @@
             // 
             this.lowLabel.AutoSize = true;
             this.lowLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lowLabel.Location = new System.Drawing.Point(19, 92);
+            this.lowLabel.Location = new System.Drawing.Point(19, 76);
             this.lowLabel.Name = "lowLabel";
             this.lowLabel.Size = new System.Drawing.Size(27, 13);
             this.lowLabel.TabIndex = 21;
@@ -398,7 +488,7 @@
             // 
             this.openLabel.AutoSize = true;
             this.openLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.openLabel.Location = new System.Drawing.Point(19, 66);
+            this.openLabel.Location = new System.Drawing.Point(19, 50);
             this.openLabel.Name = "openLabel";
             this.openLabel.Size = new System.Drawing.Size(33, 13);
             this.openLabel.TabIndex = 19;
@@ -407,7 +497,7 @@
             // openTextBox
             // 
             this.openTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.openTextBox.Location = new System.Drawing.Point(79, 61);
+            this.openTextBox.Location = new System.Drawing.Point(79, 45);
             this.openTextBox.Multiline = true;
             this.openTextBox.Name = "openTextBox";
             this.openTextBox.Size = new System.Drawing.Size(100, 20);
@@ -597,6 +687,7 @@
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.filesGroupBox.ResumeLayout(false);
+            this.filesGroupBox.PerformLayout();
             this.predictionGroupBox.ResumeLayout(false);
             this.predictionGroupBox.PerformLayout();
             this.learnGroupBox.ResumeLayout(false);
@@ -663,6 +754,13 @@
         private System.Windows.Forms.GroupBox trainGroup;
         private System.Windows.Forms.TextBox RSItextBox;
         private System.Windows.Forms.Label RSILabel;
+        private System.Windows.Forms.RadioButton monthlyButton;
+        private System.Windows.Forms.Label sampleFormatLabel;
+        private System.Windows.Forms.RadioButton dailyButton;
+        private System.Windows.Forms.RadioButton weeklyButton;
+        private System.Windows.Forms.ComboBox rsiDaysBox;
+        private System.Windows.Forms.Label rsiValueLabel;
+        private System.Windows.Forms.Label rsiDaysLabel;
     }
 }
 

@@ -65,11 +65,27 @@ namespace BIAI
         /// <summary>
         /// Możliwe netody nauki
         /// </summary>
-        private readonly string[] function = { "None", "Expotential", "Hyperbolic", "Linear" };
+        public enum Function { None, Expotential, Hyperbolic, Linear };
+        private readonly Dictionary<String, Function> functionDic = new Dictionary<String, Function>()
+        {
+            {"None", Function.None},
+            {"Expotential", Function.Expotential},
+            {"Hyperbolic", Function.Hyperbolic},
+            {"Linear", Function.Linear}
+        };
         /// <summary>
         /// Może sposoby inicjalizacji sieci
         /// </summary>
-        private readonly string[] initializer = { "None", "Constant", "NgyuenWidrow", "NormalizedRandom", "Random", "Zero" };
+        public enum Initializer { None, Constant, NgyuenWidrow, NormalizedRandom, Random, Zero };
+        private readonly Dictionary<String, Initializer> initializerDic = new Dictionary<String, Initializer>()
+        {
+            {"None", Initializer.None},
+            {"Constant", Initializer.Constant},
+            {"NgyuenWidrow", Initializer.NgyuenWidrow},
+            {"NormalizedRandom", Initializer.NormalizedRandom},
+            {"Random", Initializer.Random},
+            {"Zero", Initializer.Zero}
+        };
         #endregion
 
         private BackpropagationNetwork ourNetwork;
@@ -80,7 +96,8 @@ namespace BIAI
         private double initialLearningRate, finalLearningRate;
 
         private CsvParser parser;
-        private List<string[][]> inputData;
+        private List<Dictionary<DateTime, Double[]>> inputData;
+        private ExchangeData data;
 
         private double initializerParameter1 = 0.0d, initializerParameter2 = 0.0d;
 
@@ -114,6 +131,7 @@ namespace BIAI
         public MainWindow()
         {
             InitializeComponent();
+
             this.iterations = defaultIterations;
             this.hiddenLayerCount = HIDDEN_LAYER_MIN_COUNT;
             this.neuronCountList = new List<int>();
@@ -123,7 +141,6 @@ namespace BIAI
             }
             this.initialLearningRate = this.finalLearningRate = defaultLearningRate;
             this.parser = new CsvParser();
-            this.inputData = new List<string[][]>();
             // pamięć dla wartości z plików
             RSI = new List<double>();
             meanClose = new List<double>();
@@ -137,15 +154,15 @@ namespace BIAI
             tomorrowClose = new List<double>();
             todayClose = todayHigh = todayLow = todayOpen = todayRSI = 1.00000;
             // rodzaje metod nauki
-            foreach (string func in function)
+            foreach (Function func in Enum.GetValues(typeof(Function)))
 	        {
-                this.functionBox.Items.Add(func);
+                this.functionBox.Items.Add(func.ToString());
 	        }
             this.functionBox.Text = this.functionBox.Items[0].ToString();
             // rodzaje inicjalizatorów
-            foreach (string i in initializer)
+            foreach (Initializer initializer in Enum.GetValues(typeof(Initializer)))
             {
-                this.initializerBox.Items.Add(i);
+                this.initializerBox.Items.Add(initializer);
             }
             this.initializerBox.Text = this.initializerBox.Items[0].ToString();
         }
@@ -225,19 +242,25 @@ namespace BIAI
             double percentSSE = ourNetwork.MeanSquaredError * 100;
             this.meanSSEValue.Text = percentSSE.ToString("0.0000000") + '%';
 
-            // Ustawienie jako dzisiejszych wartości z ostatniego pliku
-            string[][] lastFile = inputData[inputData.Count - 1];
-            string[]   lastValues = lastFile[lastFile.Length - 1];
-            todayClose = Double.Parse(lastValues[1], CultureInfo.InvariantCulture);
+            // Ustawienie jako dzisiejszych wartości z ostatniej próbki
+            double[] lastValues = this.inputData.Last().Values.ToList().Last();
+            todayClose = lastValues[0];
             this.closeTextBox.Text = todayClose.ToString("0.00000");
-            todayLow = Double.Parse(lastValues[2], CultureInfo.InvariantCulture);
+            todayLow = lastValues[1];
             this.lowTextBox.Text = todayLow.ToString("0.00000");
-            todayHigh = Double.Parse(lastValues[3], CultureInfo.InvariantCulture);
+            todayHigh = lastValues[2];
             this.highTextBox.Text = todayHigh.ToString("0.00000");
-            todayOpen = Double.Parse(lastValues[4], CultureInfo.InvariantCulture);
+            todayOpen = lastValues[3];
             this.openTextBox.Text = todayOpen.ToString("0.00000");
             todayRSI = RSI.Last();
             this.RSItextBox.Text = todayRSI.ToString("0.00");
+            // ustawienie możliwości wyboru RSI
+            this.rsiDaysBox.Items.Clear();
+            for (int i = 1; i < data.Count - 1; ++i)
+            {
+                this.rsiDaysBox.Items.Add(i.ToString());
+            }
+            this.rsiDaysBox.Text = this.rsiDaysBox.Items[0].ToString();
         }
 
         /// <summary>
@@ -246,6 +269,7 @@ namespace BIAI
         private void LoadWindow(object sender, EventArgs e)
         {
             InitGraph();
+            this.monthlyButton.Checked = true;
             this.trainingIterationsBox.Text = iterations.ToString();
             this.initialLearningRateBox.Text = initialLearningRate.ToString();
             this.finalLearningRateBox.Text = finalLearningRate.ToString();
@@ -391,7 +415,7 @@ namespace BIAI
         /// <param name="e"></param>
         private void startBtn_Click(object sender, EventArgs e)
         {
-            if (inputData.Count > 0)
+            if (data != null)
             {
                 this.PrepareData();
                 this.Train();
@@ -409,20 +433,17 @@ namespace BIAI
             openFileDialog.Filter = "csv files (*.csv)|*.csv";
             openFileDialog.FilterIndex = 2;
             openFileDialog.RestoreDirectory = true;
-            openFileDialog.Multiselect = true;
+            openFileDialog.Multiselect = false;
 
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 this.filesListBox.Items.Clear();
                 try
                 {
-                    foreach (string filename in openFileDialog.FileNames)
+                    using (StreamReader reader = File.OpenText(openFileDialog.FileName))
                     {
-                        using (StreamReader reader = File.OpenText(filename))
-                        {
-                            this.inputData.Add(this.parser.Parse(reader));
-                            this.filesListBox.Items.Add(Path.GetFileName(filename) + '\n');
-                        }
+                        this.data = new ExchangeData(this.parser.Parse(reader));
+                        this.filesListBox.Items.Add(Path.GetFileName(openFileDialog.FileName) + '\n');
                     }
                 }
                 catch (Exception ex)
@@ -440,42 +461,66 @@ namespace BIAI
         /// </summary>
         private void PrepareData()
         {
+            // podzielenie pliku na mniejsze części
+            if (this.monthlyButton.Checked)
+                inputData = this.data.GetSplitData(ExchangeData.SplitMethod.Monthly);
+            else if (this.weeklyButton.Checked)
+                inputData = this.data.GetSplitData(ExchangeData.SplitMethod.Weekly);
+            else
+                inputData = this.data.GetSplitData(ExchangeData.SplitMethod.Daily);
+
             // dla każdego pliku wejściowego
-            foreach (string[][] inputFile in inputData)
+            for (int i = 0; i < inputData.Count; ++i)
             {
+                // zmiana mapy na listę
+                List<Double[]> list = inputData[i].Values.ToList();
+
                 //obliczenie RSi dla kazdego pliku wejsciowego
-                RSI.Add(calculateRSI(inputFile));
+                RSI.Add(calculateRSI(list));
 
                 // obliczenie średnich każdego z kursów dziennych
-                meanClose.Add(this.CalculateEMA(inputFile, 1));
-                meanHigh.Add(this.CalculateEMA(inputFile, 2));
-                meanLow.Add(this.CalculateEMA(inputFile, 3));
-                meanOpen.Add(this.CalculateEMA(inputFile, 4));
+                meanClose.Add(this.CalculateEMA(inputData[i], 0));
+                meanHigh.Add(this.CalculateEMA(inputData[i], 1));
+                meanLow.Add(this.CalculateEMA(inputData[i], 2));
+                meanOpen.Add(this.CalculateEMA(inputData[i], 3));
                 // pozyskanie ostatnich wartości kursów
-                actualClose.Add(Double.Parse(inputFile[inputFile.Length - 2][1], CultureInfo.InvariantCulture));
-                actualHigh.Add(Double.Parse(inputFile[inputFile.Length - 2][2], CultureInfo.InvariantCulture));
-                actualLow.Add(Double.Parse(inputFile[inputFile.Length - 2][3], CultureInfo.InvariantCulture));
-                actualOpen.Add(Double.Parse(inputFile[inputFile.Length - 2][4], CultureInfo.InvariantCulture));
+                actualClose.Add(inputData[i].Last().Value[0]);
+                actualHigh.Add(inputData[i].Last().Value[1]);
+                actualLow.Add(inputData[i].Last().Value[2]);
+                actualOpen.Add(inputData[i].Last().Value[3]);
                 // pozyskanie wartości przewidywanej
-                tomorrowClose.Add(Double.Parse(inputFile[inputFile.Length - 1][1], CultureInfo.InvariantCulture));
+                if (i != inputData.Count - 1)
+                {
+                    tomorrowClose.Add(inputData[i + 1].First().Value[1]);
+                }
+                else
+                {
+                    tomorrowClose.Add(inputData[i].Last().Value[1]);
+                }
             }
         }
         /// <summary>
         /// Obliczenie wykładniczej średniej kroczącej
         /// Dla konkretnych danych kursu (Close = 1, Max = 2, Min = 3, Open = 4)
         /// </summary>
-        private double CalculateEMA(string[][] input, int which)
+        private double CalculateEMA(Dictionary<DateTime, Double[]> input, int which)
         {
-            int periodNumber = input.Length;
+            if (input.Count == 1)
+            {
+                return input.Values.ToList().Last()[which];
+            }
+            int periodNumber = input.Count;
             double alpha = 2.0d / (periodNumber + 1);
             double numerator = 0.0d, denominator = 0.0d;
             // iterujemy od zera, czyli od najdawniejszego okresu
-            for (int i = 0; i < periodNumber - 1; ++i)
+            int i = 0;
+            foreach (var entry in input)
             {
                 double weight = Math.Pow(1 - alpha, periodNumber - i);
-                double value = Double.Parse(input[i][which], CultureInfo.InvariantCulture);
+                double value = entry.Value[which];
                 numerator += value * weight;
                 denominator += weight;
+                ++i;
             }
             return numerator / denominator;
         }
@@ -484,9 +529,14 @@ namespace BIAI
         /// Obliczenie RSI
         /// RSI = 100 - 100/(1+ sredni wzrost/sredni spadek)
         /// </summary>
-        private double calculateRSI(string[][] input)
+        private double calculateRSI(List<Double[]> input)
         {
-            int periodNumber = input.Length;
+            if (input.Count == 1)
+            {
+                return input.First()[1];
+            }
+
+            int periodNumber = input.Count;
             double alpha = 2.0d / (periodNumber + 1);
             double denominator = 0.0d;
             double avg_growth = 0.0d, avg_fall = 0.0d;
@@ -494,11 +544,11 @@ namespace BIAI
             List<double> fall = new List<double>();
 
             // porównanie wartości Close pomiędzy kolejnymi dniami oraz obliczenie spadku/wzrostu
-            for (int i = 0; i < periodNumber - 2; ++i)
+            for (int i = 0; i < periodNumber - 1; ++i)
             {
                 double weight = Math.Pow(1 - alpha, periodNumber - i);
-                double value = Double.Parse(input[i][1], CultureInfo.InvariantCulture);
-                double value_next = Double.Parse(input[i + 1][1], CultureInfo.InvariantCulture);
+                double value = input[i][1];
+                double value_next = input[i + 1][1];
                 if ((value - value_next) >= 0)
                     fall.Add((value - value_next)*weight);
                 else
@@ -592,30 +642,31 @@ namespace BIAI
         /// </summary>
         private void initializerBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            switch (this.initializerBox.Text.ToString())
+            Initializer initializer = this.initializerDic[this.initializerBox.Text.ToString()];
+            switch (initializer)
             {
-                case "None":
-                case "NormalizedRandom":
-                case "Zero":
+                case Initializer.None:
+                case Initializer.NormalizedRandom:
+                case Initializer.Zero:
                 default:
                     this.initializerParameter1Box.Visible = false;
                     this.initializerParameter2Box.Visible = false;
                     this.initializerParameter1Label.Text = String.Empty;
                     this.initializerParameter2Label.Text = String.Empty;
                     break;
-                case "Constant":
+                case Initializer.Constant:
                     this.initializerParameter1Box.Visible = true;
                     this.initializerParameter2Box.Visible = false;
                     this.initializerParameter1Label.Text = "Constant";
                     this.initializerParameter2Label.Text = String.Empty;
                     break;
-                case "NgyuenWidrow":
+                case Initializer.NgyuenWidrow:
                     this.initializerParameter1Box.Visible = true;
                     this.initializerParameter2Box.Visible = false;
                     this.initializerParameter1Label.Text = "Output range";
                     this.initializerParameter2Label.Text = String.Empty;
                     break;
-                case "Random":
+                case Initializer.Random:
                     this.initializerParameter1Box.Visible = true;
                     this.initializerParameter2Box.Visible = true;
                     this.initializerParameter1Label.Text = "Min limit";
@@ -643,24 +694,25 @@ namespace BIAI
             SigmoidLayer outputLayer = new SigmoidLayer(1);
             // wybór inicjalizatora połączeń
             IInitializer initFunction;
-            switch (initializerBox.Text.ToString())
+            Initializer initializer = this.initializerDic[initializerBox.Text.ToString()];
+            switch (initializer)
             {
-                case "None": default:
+                case Initializer.None: default:
                     initFunction = null;
                     break;
-                case "Constant":
+                case Initializer.Constant:
                     initFunction = new ConstantFunction(initializerParameter1);
                     break;
-                case "NgyuenWidrow":
+                case Initializer.NgyuenWidrow:
                     initFunction = new NguyenWidrowFunction(initializerParameter1);
                     break;
-                case "NormalizedRandom":
+                case Initializer.NormalizedRandom:
                     initFunction = new NormalizedRandomFunction();
                     break;
-                case "Random":
+                case Initializer.Random:
                     initFunction = new RandomFunction(initializerParameter1, initializerParameter2);
                     break;
-                case "Zero":
+                case Initializer.Zero:
                     initFunction = new ZeroFunction();
                     break;
             }
@@ -681,19 +733,20 @@ namespace BIAI
         /// </summary>
         private void SetNetworkLearningRate()
         {
-            switch (this.functionBox.Text.ToString())
+            Function func = this.functionDic[this.functionBox.Text.ToString()];
+            switch (func)
             {
-                case "None":
+                case Function.None:
                 default:
                     this.ourNetwork.SetLearningRate(initialLearningRate, finalLearningRate);
                     break;
-                case "Expotential":
+                case Function.Expotential:
                     this.ourNetwork.SetLearningRate(new ExponentialFunction(initialLearningRate, finalLearningRate));
                     break;
-                case "Hyperbolic":
+                case Function.Hyperbolic:
                     this.ourNetwork.SetLearningRate(new HyperbolicFunction(initialLearningRate, finalLearningRate));
                     break;
-                case "Linear":
+                case Function.Linear:
                     this.ourNetwork.SetLearningRate(new LinearFunction(initialLearningRate, finalLearningRate));
                     break;
             }
@@ -713,6 +766,53 @@ namespace BIAI
             {
                 initializerParameter2 = 0.0d;
             }
+        }
+
+        private void rsiDaysBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.RSItextBox.Text = this.CalculateRSI(data.ToList(), Int32.Parse(this.rsiDaysBox.Text, CultureInfo.InvariantCulture)).ToString();
+        }
+
+        private double CalculateRSI(List<Double[]> input, int start)
+        {
+            if (input.Count == 1)
+            {
+                return input.First()[1];
+            }
+
+            int N = input.Count - start;
+            double alpha = 2.0d / (N + 1);
+            double denominator = 0.0d;
+            double avg_growth = 0.0d, avg_fall = 0.0d;
+            List<double> growth = new List<double>();
+            List<double> fall = new List<double>();
+
+            // porównanie wartości Close pomiędzy kolejnymi dniami oraz obliczenie spadku/wzrostu
+            for (int i = start; i < input.Count - 1; ++i)
+            {
+                double weight = Math.Pow(1 - alpha, input.Count - i);
+                double value = input[i][1];
+                double value_next = input[i + 1][1];
+                if ((value - value_next) >= 0)
+                    fall.Add((value - value_next) * weight);
+                else
+                    fall.Add(0);
+                if ((value_next - value) >= 0)
+                    growth.Add((value_next - value) * weight);
+                else
+                    growth.Add(0);
+
+                denominator += weight;
+            }
+
+            //obliczanie sredniego spadku/wzrostu
+            avg_fall = fall.Sum() / denominator;
+            avg_growth = growth.Sum() / denominator;
+
+            //oblicznie RSI
+            double RSI = 100 - (100 / (1 + (avg_growth / avg_fall)));
+
+            return RSI;
         }
     }
 }
