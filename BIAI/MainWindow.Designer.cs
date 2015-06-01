@@ -85,6 +85,7 @@
             this.initializerLabel = new System.Windows.Forms.Label();
             this.initializerBox = new System.Windows.Forms.ComboBox();
             this.trainGroup = new System.Windows.Forms.GroupBox();
+            this.dailySampleBox = new System.Windows.Forms.NumericUpDown();
             this.menuStrip1.SuspendLayout();
             this.filesGroupBox.SuspendLayout();
             this.predictionGroupBox.SuspendLayout();
@@ -92,6 +93,7 @@
             this.structureGroupBox.SuspendLayout();
             this.initializationGroupBox.SuspendLayout();
             this.trainGroup.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dailySampleBox)).BeginInit();
             this.SuspendLayout();
             // 
             // graph
@@ -245,6 +247,7 @@
             // 
             // filesGroupBox
             // 
+            this.filesGroupBox.Controls.Add(this.dailySampleBox);
             this.filesGroupBox.Controls.Add(this.dailyButton);
             this.filesGroupBox.Controls.Add(this.weeklyButton);
             this.filesGroupBox.Controls.Add(this.monthlyButton);
@@ -253,7 +256,7 @@
             this.filesGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.filesGroupBox.Location = new System.Drawing.Point(270, 27);
             this.filesGroupBox.Name = "filesGroupBox";
-            this.filesGroupBox.Size = new System.Drawing.Size(200, 119);
+            this.filesGroupBox.Size = new System.Drawing.Size(200, 149);
             this.filesGroupBox.TabIndex = 17;
             this.filesGroupBox.TabStop = false;
             this.filesGroupBox.Text = "File for Training";
@@ -262,13 +265,14 @@
             // 
             this.dailyButton.AutoSize = true;
             this.dailyButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.dailyButton.Location = new System.Drawing.Point(146, 90);
+            this.dailyButton.Location = new System.Drawing.Point(9, 120);
             this.dailyButton.Name = "dailyButton";
             this.dailyButton.Size = new System.Drawing.Size(48, 17);
             this.dailyButton.TabIndex = 4;
             this.dailyButton.TabStop = true;
             this.dailyButton.Text = "Daily";
             this.dailyButton.UseVisualStyleBackColor = true;
+            this.dailyButton.CheckedChanged += new System.EventHandler(this.dailyButton_CheckedChanged);
             // 
             // weeklyButton
             // 
@@ -667,6 +671,30 @@
             this.trainGroup.TabStop = false;
             this.trainGroup.Text = "Network Training";
             // 
+            // dailySampleBox
+            // 
+            this.dailySampleBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.dailySampleBox.Location = new System.Drawing.Point(77, 120);
+            this.dailySampleBox.Maximum = new decimal(new int[] {
+            14,
+            0,
+            0,
+            0});
+            this.dailySampleBox.Minimum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.dailySampleBox.Name = "dailySampleBox";
+            this.dailySampleBox.Size = new System.Drawing.Size(61, 20);
+            this.dailySampleBox.TabIndex = 5;
+            this.dailySampleBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.dailySampleBox.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -698,6 +726,7 @@
             this.initializationGroupBox.PerformLayout();
             this.trainGroup.ResumeLayout(false);
             this.trainGroup.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dailySampleBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -761,6 +790,7 @@
         private System.Windows.Forms.ComboBox rsiDaysBox;
         private System.Windows.Forms.Label rsiValueLabel;
         private System.Windows.Forms.Label rsiDaysLabel;
+        private System.Windows.Forms.NumericUpDown dailySampleBox;
     }
 }
 

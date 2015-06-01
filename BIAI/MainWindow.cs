@@ -98,6 +98,7 @@ namespace BIAI
         private CsvParser parser;
         private List<Dictionary<DateTime, Double[]>> inputData;
         private ExchangeData data;
+        private int selected_rsi_date = 0;
 
         private double initializerParameter1 = 0.0d, initializerParameter2 = 0.0d;
 
@@ -256,11 +257,13 @@ namespace BIAI
             this.RSItextBox.Text = todayRSI.ToString("0.00");
             // ustawienie możliwości wyboru RSI
             this.rsiDaysBox.Items.Clear();
-            for (int i = 1; i < data.Count - 1; ++i)
+            List<DateTime> dtList = data.KeysToList();
+            for (int i = 1; i < dtList.Count - 1; ++i)
             {
-                this.rsiDaysBox.Items.Add(i.ToString());
+                this.rsiDaysBox.Items.Add(dtList[i].ToString("yy-MM-dd"));
             }
-            this.rsiDaysBox.Text = this.rsiDaysBox.Items[0].ToString();
+            this.selected_rsi_date = 0;
+            this.rsiDaysBox.Text = this.rsiDaysBox.Items[selected_rsi_date].ToString();
         }
 
         /// <summary>
@@ -270,6 +273,7 @@ namespace BIAI
         {
             InitGraph();
             this.monthlyButton.Checked = true;
+            this.dailySampleBox.Visible = false;
             this.trainingIterationsBox.Text = iterations.ToString();
             this.initialLearningRateBox.Text = initialLearningRate.ToString();
             this.finalLearningRateBox.Text = finalLearningRate.ToString();
@@ -467,7 +471,7 @@ namespace BIAI
             else if (this.weeklyButton.Checked)
                 inputData = this.data.GetSplitData(ExchangeData.SplitMethod.Weekly);
             else
-                inputData = this.data.GetSplitData(ExchangeData.SplitMethod.Daily);
+                inputData = this.data.GetSplitData(ExchangeData.SplitMethod.Daily, Convert.ToInt32(dailySampleBox.Value));
 
             // dla każdego pliku wejściowego
             for (int i = 0; i < inputData.Count; ++i)
@@ -770,7 +774,8 @@ namespace BIAI
 
         private void rsiDaysBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            this.RSItextBox.Text = this.CalculateRSI(data.ToList(), Int32.Parse(this.rsiDaysBox.Text, CultureInfo.InvariantCulture)).ToString();
+            selected_rsi_date = this.rsiDaysBox.Items.IndexOf(this.rsiDaysBox.Text);
+            this.RSItextBox.Text = this.CalculateRSI(data.ValuesToList(), selected_rsi_date).ToString();
         }
 
         private double CalculateRSI(List<Double[]> input, int start)
@@ -813,6 +818,18 @@ namespace BIAI
             double RSI = 100 - (100 / (1 + (avg_growth / avg_fall)));
 
             return RSI;
+        }
+
+        private void dailyButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (dailyButton.Checked)
+            {
+                this.dailySampleBox.Visible = true;
+            }
+            else
+            {
+                this.dailySampleBox.Visible = false;
+            }
         }
     }
 }

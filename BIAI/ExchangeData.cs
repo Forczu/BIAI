@@ -73,7 +73,7 @@ namespace BIAI
         /// </summary>
         /// <param name="method">kryterium</param>
         /// <returns>Listę podzielonych danych</returns>
-        public List<Dictionary<DateTime, Double[]>> GetSplitData(SplitMethod method)
+        public List<Dictionary<DateTime, Double[]>> GetSplitData(SplitMethod method, Int32 days = 7)
         {
             switch(method)
             {
@@ -86,36 +86,19 @@ namespace BIAI
                     return monthlyList;
 
                 case SplitMethod.Weekly:
-                    List<Dictionary<DateTime, Double[]>> weeklyList = new List<Dictionary<DateTime, Double[]>>();
+                case SplitMethod.Daily:
+                    List<Dictionary<DateTime, Double[]>> dailyList = new List<Dictionary<DateTime, Double[]>>();
                     int currentiteration = 0;
                     int currentDic = -1;
                     foreach (var entry in data)
                     {
-                        if (currentDic != currentiteration / 7)
+                        if (currentDic != currentiteration / days)
                         {
                             currentDic++;
-                            weeklyList.Add(new Dictionary<DateTime, Double[]>());
+                            dailyList.Add(new Dictionary<DateTime, Double[]>());
                         }
-                        weeklyList[currentDic].Add(entry.Key, entry.Value);
+                        dailyList[currentDic].Add(entry.Key, entry.Value);
                         currentiteration++;
-                    }
-                    return weeklyList;
-
-                case SplitMethod.Daily:
-                    List<Dictionary<DateTime, Double[]>> dailyList = new List<Dictionary<DateTime, Double[]>>();
-                    var tmpMonthlyList =
-                        data.GroupBy(pair => pair.Key.Day)
-                             .OrderBy(gr => gr.Key)
-                             .Select(gr => gr.ToDictionary(item => item.Key, item => item.Value))
-                             .ToList();
-                    foreach (var month in tmpMonthlyList)
-                    {
-                        var tmpDailyList =
-                            month.GroupBy(pair => pair.Key.Month)
-                                 .OrderBy(gr => gr.Key)
-                                 .Select(gr => gr.ToDictionary(item => item.Key, item => item.Value))
-                                 .ToList();
-                        dailyList.AddRange(tmpDailyList);
                     }
                     return dailyList;
             }
@@ -127,9 +110,14 @@ namespace BIAI
             get { return data.Count; }
         }
 
-        public List<Double[]> ToList()
+        public List<Double[]> ValuesToList()
         {
             return data.Values.ToList();
+        }
+
+        public List<DateTime> KeysToList()
+        {
+            return data.Keys.ToList();
         }
     }
 }
