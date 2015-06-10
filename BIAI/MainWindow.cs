@@ -94,6 +94,7 @@ namespace BIAI
         private int hiddenLayerCount;
         private List<int> neuronCountList;
         private double initialLearningRate, finalLearningRate;
+        private int trainingDataCount;
 
         private CsvParser parser;
         private List<Dictionary<DateTime, Double[]>> inputData;
@@ -196,9 +197,12 @@ namespace BIAI
             // zestaw treningowy XD *doxus face*
             TrainingSet trainingSet = new TrainingSet(5, 1);
             
+            //70% danych do treningu
+            trainingDataCount = (int)Math.Ceiling(inputData.Count * 0.7);
+
             // próbki treningowe
             // każda próbka powstaje na podstawie jednego pliku
-            for (int i = 0; i < inputData.Count; ++i)
+            for (int i = 0; i < trainingDataCount; ++i)
             {
                 trainingSet.Add(
                     new TrainingSample(
@@ -495,11 +499,11 @@ namespace BIAI
                 // pozyskanie wartości przewidywanej
                 if (i != inputData.Count - 1)
                 {
-                    tomorrowClose.Add(inputData[i + 1].First().Value[1]);
+                    tomorrowClose.Add(inputData[i + 1].First().Value[0]);
                 }
                 else
                 {
-                    tomorrowClose.Add(inputData[i].Last().Value[1]);
+                    tomorrowClose.Add(inputData[i].Last().Value[0]);
                 }
             }
         }
@@ -583,6 +587,39 @@ namespace BIAI
             if (ourNetwork != null)
             {
                 this.predictionRespone.Items.Clear();
+                //tablica wyników przewidywan
+                double[] result = new double[inputData.Count - trainingDataCount];
+                //tablica booli: true - jesli wynik przewidywania i aktualne dane sie pokrywaja
+                bool[] correctPredict = new bool[inputData.Count - trainingDataCount];
+                int j = 0;
+                //30% danych do testowania
+                for (int i = trainingDataCount; i < inputData.Count; ++i)
+                {
+                    result[j] = ourNetwork.Run(
+                        new double[INPUT_NUMBER]
+                    {
+                        actualClose[i] - meanClose[i], actualHigh[i] - meanHigh[i], actualLow[i] - meanLow[i], actualOpen[i] - meanOpen[i], RSI[i]
+                    })[0];
+
+                    if ((tomorrowClose[i] - actualClose[i]) > 0 && result[j] > 0)
+                        correctPredict[j] = true;
+                    else if ((tomorrowClose[i] - actualClose[i]) <= 0 && result[j] <= 0)
+                        correctPredict[j] = true;
+                    else
+                        correctPredict[j] = false;
+                    j++;
+                }
+
+                int true_count = 0;
+
+                for (int i = 0; i < correctPredict.Length; ++i)
+                    if (correctPredict[i])
+                        true_count++;
+
+                this.predictionRespone.Items.Add("Przewidziano " + true_count.ToString() + " na " + correctPredict.Length.ToString() + " dobrze ");
+
+                /*
+                this.predictionRespone.Items.Clear();
                 this.predictionRespone.Items.Add("Tomorrow, the close rate will be\n");
                 double result = ourNetwork.Run(
                     new double[INPUT_NUMBER]
@@ -600,7 +637,7 @@ namespace BIAI
                 else
                 {
                     this.predictionRespone.Items.Add("LOWER");
-                }
+                }*/
             }
         }
 
