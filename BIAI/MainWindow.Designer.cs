@@ -363,6 +363,7 @@
             this.functionBox.Name = "functionBox";
             this.functionBox.Size = new System.Drawing.Size(100, 21);
             this.functionBox.TabIndex = 22;
+            this.functionBox.SelectedIndexChanged += new System.EventHandler(this.functionBox_SelectedIndexChanged);
             // 
             // finalLearningRateLabel
             // 
@@ -474,6 +475,7 @@
             0,
             0,
             0});
+            this.neuronCountBox3.ValueChanged += new System.EventHandler(this.neuronCountBox3_ValueChanged);
             // 
             // neuronCountBox2
             // 
@@ -491,6 +493,7 @@
             0,
             0,
             0});
+            this.neuronCountBox2.ValueChanged += new System.EventHandler(this.neuronCountBox2_ValueChanged);
             // 
             // neuronCountBox1
             // 
@@ -508,6 +511,7 @@
             0,
             0,
             0});
+            this.neuronCountBox1.ValueChanged += new System.EventHandler(this.neuronCountBox1_ValueChanged);
             // 
             // hiddenLayerCountBox
             // 
