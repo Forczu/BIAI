@@ -79,7 +79,7 @@ namespace BIAI
             {
                 case SplitMethod.Monthly: default:
                     var monthlyList =
-                        data.GroupBy(pair => pair.Key.Month)
+                        data.GroupBy(pair => new DateTime(pair.Key.Year, pair.Key.Month, 1))
                              .OrderBy(gr => gr.Key)
                              .Select(gr => gr.ToDictionary(item => item.Key, item => item.Value))
                              .ToList();

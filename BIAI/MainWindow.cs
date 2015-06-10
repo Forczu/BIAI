@@ -229,6 +229,8 @@ namespace BIAI
         /// </summary>
         private void PrepareData()
         {
+            // wyczyszczenie obecnych danych
+            ourNetwork.EraseData();
             // podzielenie pliku na mniejsze części
             if (this.monthlyButton.Checked)
                 ourNetwork.PrepareData(data, ExchangeData.SplitMethod.Monthly);
@@ -340,6 +342,7 @@ namespace BIAI
             ourNetwork.NeuronCount[2] = DecimalToInt32(neuronCountBox3.Value);
         }
         #endregion
+
         private Double DecimalToDouble(Decimal input)
         {
             return Decimal.ToDouble(input);
@@ -347,6 +350,11 @@ namespace BIAI
         private Int32 DecimalToInt32(Decimal input)
         {
             return Decimal.ToInt32(input);
+        }
+
+        private void closeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
         
     }

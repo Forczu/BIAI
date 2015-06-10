@@ -72,6 +72,7 @@
             this.initializerBox = new System.Windows.Forms.ComboBox();
             this.trainGroup = new System.Windows.Forms.GroupBox();
             this.trainingIterationsBox = new System.Windows.Forms.NumericUpDown();
+            this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.filesGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dailySampleBox)).BeginInit();
@@ -184,7 +185,8 @@
             // fileToolStripMenuItem
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openToolStripMenuItem});
+            this.openToolStripMenuItem,
+            this.closeToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
@@ -192,7 +194,7 @@
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
@@ -217,12 +219,12 @@
             this.dailySampleBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.dailySampleBox.Location = new System.Drawing.Point(77, 120);
             this.dailySampleBox.Maximum = new decimal(new int[] {
-            14,
+            30,
             0,
             0,
             0});
             this.dailySampleBox.Minimum = new decimal(new int[] {
-            2,
+            3,
             0,
             0,
             0});
@@ -231,7 +233,7 @@
             this.dailySampleBox.TabIndex = 5;
             this.dailySampleBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.dailySampleBox.Value = new decimal(new int[] {
-            2,
+            3,
             0,
             0,
             0});
@@ -640,6 +642,13 @@
             0});
             this.trainingIterationsBox.ValueChanged += new System.EventHandler(this.trainingIterationsBox_ValueChanged);
             // 
+            // closeToolStripMenuItem
+            // 
+            this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
+            this.closeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.closeToolStripMenuItem.Text = "Close";
+            this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -730,6 +739,7 @@
         private System.Windows.Forms.NumericUpDown trainingIterationsBox;
         private System.Windows.Forms.NumericUpDown initializerParameter2Box;
         private System.Windows.Forms.NumericUpDown initializerParameter1Box;
+        private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
     }
 }
 

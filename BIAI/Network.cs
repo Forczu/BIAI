@@ -498,6 +498,19 @@ namespace BIAI
             return ((float)true_count / (float)correctPredict.Length) * 100;
         }
 
+        public void EraseData()
+        {
+            this.meanClose.Clear();
+            this.meanHigh.Clear();
+            this.meanLow.Clear();
+            this.meanOpen.Clear();
+            this.RSI.Clear();
+            this.actualClose.Clear();
+            this.actualHigh.Clear();
+            this.actualLow.Clear();
+            this.actualOpen.Clear();
+        }
+
         #endregion
     }
 }
