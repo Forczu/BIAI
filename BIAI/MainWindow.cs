@@ -23,29 +23,9 @@ namespace BIAI
     {
         #region Wartości domyślne
         /// <summary>
-        /// domyślna liczba cykli treningowych
-        /// </summary>
-        private readonly int defaultIterations = 100;
-        /// <summary>
-        /// domyślna liczba ukrytych warstw
-        /// </summary>
-        private readonly int defaultHiddenLayerCount = 3;
-        /// <summary>
-        /// domyślna liczba neuronów
-        /// </summary>
-        private readonly int defaultNeuronCount = 3;
-        /// <summary>
-        /// domyślna wartość poznawcza (jakoś tak)
-        /// </summary>
-        private readonly double defaultLearningRate = 0.25d;
-        /// <summary>
         /// Domyślna wartość dzisiejszego kursu
         /// </summary>
         private readonly double defaultTodayRate = 1.00000d;
-        /// <summary>
-        /// Domyślna wartość parametrów initializatora
-        /// </summary>
-        private readonly double defaultInitializerParameter = 0.0d;
         #endregion
 
         #region Wartości stałe
@@ -101,7 +81,7 @@ namespace BIAI
         private ExchangeData data;
         private int selected_rsi_date = 0;
 
-        private double initializerParameter1 = 0.0d, initializerParameter2 = 0.0d;
+        private double initializerParameter1, initializerParameter2;
 
         #region Wartości do wstępnego przetworzenia
         /// <summary>
@@ -132,16 +112,14 @@ namespace BIAI
 
         public MainWindow()
         {
+            // inicjalizacja okna
             InitializeComponent();
-
-            this.iterations = defaultIterations;
-            this.hiddenLayerCount = HIDDEN_LAYER_MIN_COUNT;
+            // przydzielenie pamięci dla obiektów
             this.neuronCountList = new List<int>();
             for (int i = 0; i < HIDDEN_LAYER_MAX_COUNT; ++i)
             {
-                neuronCountList.Add(defaultNeuronCount);
+                neuronCountList.Add(0);
             }
-            this.initialLearningRate = this.finalLearningRate = defaultLearningRate;
             this.parser = new CsvParser();
             // pamięć dla wartości z plików
             RSI = new List<double>();
@@ -174,17 +152,6 @@ namespace BIAI
         /// </summary>
         private void Train()
         {
-            // ustawienie wartości
-            this.ValidateInputValues();
-
-            // ustawienie ich ponownie w textboxach w oknie
-            trainingIterationsBox.Text = iterations.ToString();
-            initialLearningRateBox.Text = initialLearningRate.ToString();
-            finalLearningRateBox.Text = finalLearningRate.ToString();
-            neuronCountBox1.Text = neuronCountList[0].ToString();
-            neuronCountBox2.Text = neuronCountList[1].ToString();
-            neuronCountBox3.Text = neuronCountList[2].ToString();
-
             errorList = new double[iterations];
             InitGraph();
 
@@ -197,7 +164,7 @@ namespace BIAI
             // zestaw treningowy XD *doxus face*
             TrainingSet trainingSet = new TrainingSet(5, 1);
             
-            //70% danych do treningu
+            // 70% danych do treningu
             trainingDataCount = (int)Math.Ceiling(inputData.Count * 0.7);
 
             // próbki treningowe
@@ -248,26 +215,26 @@ namespace BIAI
             this.meanSSEValue.Text = percentSSE.ToString("0.0000000") + '%';
 
             // Ustawienie jako dzisiejszych wartości z ostatniej próbki
-            double[] lastValues = this.inputData.Last().Values.ToList().Last();
-            todayClose = lastValues[0];
-            this.closeTextBox.Text = todayClose.ToString("0.00000");
-            todayLow = lastValues[1];
-            this.lowTextBox.Text = todayLow.ToString("0.00000");
-            todayHigh = lastValues[2];
-            this.highTextBox.Text = todayHigh.ToString("0.00000");
-            todayOpen = lastValues[3];
-            this.openTextBox.Text = todayOpen.ToString("0.00000");
-            todayRSI = RSI.Last();
-            this.RSItextBox.Text = todayRSI.ToString("0.00");
+            //double[] lastValues = this.inputData.Last().Values.ToList().Last();
+            //todayClose = lastValues[0];
+            //this.closeTextBox.Text = todayClose.ToString("0.00000");
+            //todayLow = lastValues[1];
+            //this.lowTextBox.Text = todayLow.ToString("0.00000");
+            //todayHigh = lastValues[2];
+            //this.highTextBox.Text = todayHigh.ToString("0.00000");
+            //todayOpen = lastValues[3];
+            //this.openTextBox.Text = todayOpen.ToString("0.00000");
+            //todayRSI = RSI.Last();
+            //this.RSItextBox.Text = todayRSI.ToString("0.00");
             // ustawienie możliwości wyboru RSI
-            this.rsiDaysBox.Items.Clear();
-            List<DateTime> dtList = data.KeysToList();
-            for (int i = 1; i < dtList.Count - 1; ++i)
-            {
-                this.rsiDaysBox.Items.Add(dtList[i].ToString("yy-MM-dd"));
-            }
-            this.selected_rsi_date = 0;
-            this.rsiDaysBox.Text = this.rsiDaysBox.Items[selected_rsi_date].ToString();
+            //this.rsiDaysBox.Items.Clear();
+            //List<DateTime> dtList = data.KeysToList();
+            //for (int i = 1; i < dtList.Count - 1; ++i)
+            //{
+            //    this.rsiDaysBox.Items.Add(dtList[i].ToString("yy-MM-dd"));
+            //}
+            //this.selected_rsi_date = 0;
+            //this.rsiDaysBox.Text = this.rsiDaysBox.Items[selected_rsi_date].ToString();
         }
 
         /// <summary>
@@ -275,23 +242,21 @@ namespace BIAI
         /// </summary>
         private void LoadWindow(object sender, EventArgs e)
         {
+            // narysowanie grafu
             InitGraph();
             this.monthlyButton.Checked = true;
             this.dailySampleBox.Visible = false;
-            this.trainingIterationsBox.Text = iterations.ToString();
-            this.initialLearningRateBox.Text = initialLearningRate.ToString();
-            this.finalLearningRateBox.Text = finalLearningRate.ToString();
-            this.hiddenLayerCountBox.Text = hiddenLayerCount.ToString();
-            this.neuronCountBox1.Text = neuronCountList[0].ToString();
-            this.neuronCountBox2.Text = neuronCountList[1].ToString();
-            this.neuronCountBox3.Text = neuronCountList[2].ToString();
-            this.closeTextBox.Text = todayClose.ToString("0.00000");
-            this.lowTextBox.Text = todayLow.ToString("0.00000");
-            this.highTextBox.Text = todayHigh.ToString("0.00000");
-            this.openTextBox.Text = todayOpen.ToString("0.00000");
-            this.RSItextBox.Text = todayRSI.ToString("0.00000");
-            this.initializerParameter1Box.Text = initializerParameter1.ToString();
-            this.initializerParameter2Box.Text = initializerParameter2.ToString();
+            // przekazanie domyślnych wartości z okna do odpowiednich zmiennych
+            DecimalToInt32(trainingIterationsBox.Value, ref iterations);
+            DecimalToInt32(hiddenLayerCountBox.Value, ref hiddenLayerCount);
+            ChangeHiddenLayersNumber(hiddenLayerCount);
+            DecimalToDouble(initialLearningRateBox.Value, ref initialLearningRate);
+            DecimalToDouble(finalLearningRateBox.Value, ref finalLearningRate);
+            neuronCountList[0] = DecimalToInt32(neuronCountBox1.Value);
+            neuronCountList[1] = DecimalToInt32(neuronCountBox2.Value);
+            neuronCountList[2] = DecimalToInt32(neuronCountBox3.Value);
+            DecimalToDouble(initializerParameter1Box.Value, ref initializerParameter1);
+            DecimalToDouble(initializerParameter2Box.Value, ref initializerParameter2);
         }
 
         private void InitGraph()
@@ -316,89 +281,20 @@ namespace BIAI
         }
 
         /// <summary>
-        /// Sprawdzenie, czy wpisane wartości przez użytkownika sa poprawne
-        /// Jeśli nie, zostają zastąpione wartościami domyślnymi
-        /// </summary>
-        private void ValidateInputValues()
-        {
-            if (!int.TryParse(trainingIterationsBox.Text.Trim(), out iterations))
-            {
-                iterations = defaultIterations;
-            }
-            if (!double.TryParse(initialLearningRateBox.Text.Trim(), out initialLearningRate))
-            {
-                initialLearningRate = defaultLearningRate;
-            }
-            if (!double.TryParse(finalLearningRateBox.Text.Trim(), out finalLearningRate))
-            {
-                finalLearningRate = defaultLearningRate;
-            }
-            if (neuronCountBox3.Enabled)
-            {
-                int result;
-                if (!int.TryParse(neuronCountBox3.Text.Trim(), out result))
-                    neuronCountList[2] = defaultNeuronCount;
-                else
-                    neuronCountList[2] = result;
-            }
-            if (neuronCountBox2.Enabled)
-            {
-                int result;
-                if (!int.TryParse(neuronCountBox2.Text.Trim(), out result))
-                    neuronCountList[1] = defaultNeuronCount;
-                else
-                    neuronCountList[1] = result;
-            }
-            if (neuronCountBox1.Enabled)
-            {
-                int result;
-                if (!int.TryParse(neuronCountBox1.Text.Trim(), out result))
-                    neuronCountList[0] = defaultNeuronCount;
-                else
-                    neuronCountList[0] = result;
-            }
-            
-            if (iterations < 1)
-            {
-                iterations = 1;
-            }
-            if (initialLearningRate < 0.01)
-            {
-                initialLearningRate = 0.01;
-            }
-            if (finalLearningRate < 0.01)
-            {
-                finalLearningRate = 0.01;
-            }
-            for (int i = 0; i < HIDDEN_LAYER_MAX_COUNT; i++)
-            {
-                if (neuronCountList[i] < 1)
-                {
-                    neuronCountList[i] = 1;
-                }
-            }
-        }
-
-        /// <summary>
         /// Zmiana liczby ukrytych warstw
         /// W zależności od wartości blokuje inne textboxy z liczbami neuronów w warstwie
         /// </summary>
-        private void hiddenLayerCountBox_TextChanged(object sender, EventArgs e)
+        private void hiddenLayerCountBox_ValueChanged(object sender, EventArgs e)
         {
-            if (!int.TryParse(hiddenLayerCountBox.Text.Trim(), out hiddenLayerCount))
-            {
-                hiddenLayerCount = HIDDEN_LAYER_MIN_COUNT;
-            }
-            if (hiddenLayerCount < 1) 
-            {
-                hiddenLayerCount = HIDDEN_LAYER_MIN_COUNT;
-                this.hiddenLayerCountBox.Text = HIDDEN_LAYER_MIN_COUNT.ToString();
-            }
-            else if (hiddenLayerCount > 3)
-            {
-                hiddenLayerCount = HIDDEN_LAYER_MAX_COUNT;
-                this.hiddenLayerCountBox.Text = HIDDEN_LAYER_MAX_COUNT.ToString();
-            }
+            DecimalToInt32(hiddenLayerCountBox.Value, ref hiddenLayerCount);
+            ChangeHiddenLayersNumber(hiddenLayerCount);
+        }
+        /// <summary>
+        /// Zmiana liczby ukrytych warstw w sieci neuronowej
+        /// </summary>
+        /// <param name="number"></param>
+        private void ChangeHiddenLayersNumber(int number)
+        {
             switch (hiddenLayerCount)
             {
                 case 3:
@@ -409,7 +305,7 @@ namespace BIAI
                     this.neuronCountBox3.Enabled = false;
                     this.neuronCountBox2.Enabled = true;
                     break;
-                case 1:
+                case 1: default:
                     this.neuronCountBox3.Enabled = false;
                     this.neuronCountBox2.Enabled = false;
                     break;
@@ -541,7 +437,7 @@ namespace BIAI
         {
             if (input.Count == 1)
             {
-                return input.First()[1];
+                return input.First()[0];
             }
 
             int periodNumber = input.Count;
@@ -555,8 +451,8 @@ namespace BIAI
             for (int i = 0; i < periodNumber - 1; ++i)
             {
                 double weight = Math.Pow(1 - alpha, periodNumber - i);
-                double value = input[i][1];
-                double value_next = input[i + 1][1];
+                double value = input[i][0];
+                double value_next = input[i + 1][0];
                 if ((value - value_next) >= 0)
                     fall.Add((value - value_next)*weight);
                 else
@@ -641,26 +537,6 @@ namespace BIAI
             }
         }
 
-        private void openTextBox_TextChanged(object sender, EventArgs e)
-        {
-            this.ParseDoubleBox(ref todayOpen, defaultTodayRate, value => openTextBox.Text = value, openTextBox.Text.Trim());
-        }
-
-        private void lowTextBox_TextChanged(object sender, EventArgs e)
-        {
-            this.ParseDoubleBox(ref todayLow, defaultTodayRate, value => lowTextBox.Text = value, lowTextBox.Text.Trim());
-        }
-
-        private void highTextBox_TextChanged(object sender, EventArgs e)
-        {
-            this.ParseDoubleBox(ref todayHigh, defaultTodayRate, value => highTextBox.Text = value, highTextBox.Text.Trim());
-        }
-
-        private void closeTextBox_TextChanged(object sender, EventArgs e)
-        {
-            this.ParseDoubleBox(ref todayClose, defaultTodayRate, value => closeTextBox.Text = value, closeTextBox.Text.Trim());
-        }
-
         /// <summary>
         /// Sprawdzenie poprawności konwersji string -> double,
         /// i przypisanie jej wskazanemu TextBoxowi
@@ -714,7 +590,6 @@ namespace BIAI
                     this.initializerParameter2Label.Text = "Max limit";
                     break;
             }
-            this.initializerParameter1 = this.initializerParameter2 = defaultInitializerParameter;
         }
 
         /// <summary>
@@ -793,33 +668,11 @@ namespace BIAI
             }
         }
 
-        private void initializerParameter1Box_TextChanged(object sender, EventArgs e)
-        {
-            if (!double.TryParse(initializerParameter1Box.Text.Trim(), out initializerParameter1))
-            {
-                initializerParameter1 = 0.0d;
-            }
-        }
-
-        private void initializerParameter2Box_TextChanged(object sender, EventArgs e)
-        {
-            if (!double.TryParse(initializerParameter2Box.Text.Trim(), out initializerParameter2))
-            {
-                initializerParameter2 = 0.0d;
-            }
-        }
-
-        private void rsiDaysBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            selected_rsi_date = this.rsiDaysBox.Items.IndexOf(this.rsiDaysBox.Text);
-            this.RSItextBox.Text = this.CalculateRSI(data.ValuesToList(), selected_rsi_date).ToString();
-        }
-
         private double CalculateRSI(List<Double[]> input, int start)
         {
             if (input.Count == 1)
             {
-                return input.First()[1];
+                return input.First()[0];
             }
 
             int N = input.Count - start;
@@ -833,8 +686,8 @@ namespace BIAI
             for (int i = start; i < input.Count - 1; ++i)
             {
                 double weight = Math.Pow(1 - alpha, input.Count - i);
-                double value = input[i][1];
-                double value_next = input[i + 1][1];
+                double value = input[i][0];
+                double value_next = input[i + 1][0];
                 if ((value - value_next) >= 0)
                     fall.Add((value - value_next) * weight);
                 else
@@ -867,6 +720,43 @@ namespace BIAI
             {
                 this.dailySampleBox.Visible = false;
             }
+        }
+
+        private void initialLearningRateBox_ValueChanged(object sender, EventArgs e)
+        {
+            DecimalToDouble(initialLearningRateBox.Value, ref initialLearningRate);
+        }
+        private void finalLearningRateBox_ValueChanged(object sender, EventArgs e)
+        {
+            DecimalToDouble(finalLearningRateBox.Value, ref finalLearningRate);
+        }
+        private void trainingIterationsBox_ValueChanged(object sender, EventArgs e)
+        {
+            DecimalToInt32(trainingIterationsBox.Value, ref iterations);
+        }
+        private void initializerParameter1Box_ValueChanged(object sender, EventArgs e)
+        {
+            DecimalToDouble(initializerParameter1Box.Value, ref initializerParameter1);
+        }
+        private void initializerParameter2Box_ValueChanged(object sender, EventArgs e)
+        {
+            DecimalToDouble(initializerParameter2Box.Value, ref initializerParameter2);
+        }
+        private void DecimalToDouble(Decimal input, ref Double output)
+        {
+            output = Decimal.ToDouble(input);
+        }
+        private Double DecimalToDouble(Decimal input)
+        {
+            return Decimal.ToDouble(input);
+        }
+        private void DecimalToInt32(Decimal input, ref Int32 output)
+        {
+            output = Decimal.ToInt32(input);
+        }
+        private Int32 DecimalToInt32(Decimal input)
+        {
+            return Decimal.ToInt32(input);
         }
     }
 }
