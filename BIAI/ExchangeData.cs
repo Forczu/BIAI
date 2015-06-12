@@ -21,17 +21,6 @@ namespace BIAI
         private readonly Dictionary<DateTime, Double[]> data;
 
         /// <summary>
-        /// Możliwe metody podziału danych wejściowych
-        /// </summary>
-        public enum SplitMethod { Monthly, Weekly, Daily }
-        private Dictionary<String, SplitMethod> splitMethodDic = new Dictionary<String, SplitMethod>()
-        {
-            {"Monthly", SplitMethod.Monthly},
-            {"Weekly", SplitMethod.Weekly},
-            {"Daily", SplitMethod.Daily}
-        };
-
-        /// <summary>
         /// Utworzenie nowego zbioru danych
         /// </summary>
         /// <param name="inputData">informacje w postaci csv</param>
@@ -68,40 +57,17 @@ namespace BIAI
             return new DateTime(Convert.ToInt32(year), Convert.ToInt32(month), Convert.ToInt32(day));
         }
 
-        /// <summary>
-        /// Funkcja zwracają listę danych wejściowych, podzielonych wg przekazanego kryterium
-        /// </summary>
-        /// <param name="method">kryterium</param>
-        /// <returns>Listę podzielonych danych</returns>
-        public List<Dictionary<DateTime, Double[]>> GetSplitData(SplitMethod method, Int32 days = 7)
-        {
-            switch(method)
-            {
-                case SplitMethod.Monthly: default:
-                    var monthlyList =
-                        data.GroupBy(pair => new DateTime(pair.Key.Year, pair.Key.Month, 1))
-                             .OrderBy(gr => gr.Key)
-                             .Select(gr => gr.ToDictionary(item => item.Key, item => item.Value))
-                             .ToList();
-                    return monthlyList;
 
-                case SplitMethod.Weekly:
-                case SplitMethod.Daily:
-                    List<Dictionary<DateTime, Double[]>> dailyList = new List<Dictionary<DateTime, Double[]>>();
-                    int currentiteration = 0;
-                    int currentDic = -1;
-                    foreach (var entry in data)
-                    {
-                        if (currentDic != currentiteration / days)
-                        {
-                            currentDic++;
-                            dailyList.Add(new Dictionary<DateTime, Double[]>());
-                        }
-                        dailyList[currentDic].Add(entry.Key, entry.Value);
-                        currentiteration++;
-                    }
-                    return dailyList;
-            }
+        /// <summary>
+        /// Zwraca część danych wejściowych.
+        /// </summary>
+        /// <param name="start">Indeks początkowy.</param>
+        /// <param name="days">Liczba dni w liście.</param>
+        /// <returns></returns>
+        public List<Double[]> GetSplitData(Int32 start, Int32 days)
+        {
+            List<Double[]> values = data.Values.ToList();
+            return values.GetRange(start, days);
         }
 
 

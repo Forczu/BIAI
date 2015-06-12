@@ -40,6 +40,7 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.filesGroupBox = new System.Windows.Forms.GroupBox();
             this.dailySampleBox = new System.Windows.Forms.NumericUpDown();
             this.dailyButton = new System.Windows.Forms.RadioButton();
@@ -72,7 +73,6 @@
             this.initializerBox = new System.Windows.Forms.ComboBox();
             this.trainGroup = new System.Windows.Forms.GroupBox();
             this.trainingIterationsBox = new System.Windows.Forms.NumericUpDown();
-            this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.filesGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dailySampleBox)).BeginInit();
@@ -194,9 +194,16 @@
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
+            // 
+            // closeToolStripMenuItem
+            // 
+            this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
+            this.closeToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
+            this.closeToolStripMenuItem.Text = "Close";
+            this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
             // 
             // filesGroupBox
             // 
@@ -206,10 +213,10 @@
             this.filesGroupBox.Controls.Add(this.monthlyButton);
             this.filesGroupBox.Controls.Add(this.sampleFormatLabel);
             this.filesGroupBox.Controls.Add(this.filesListBox);
-            this.filesGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.filesGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.filesGroupBox.Location = new System.Drawing.Point(270, 27);
             this.filesGroupBox.Name = "filesGroupBox";
-            this.filesGroupBox.Size = new System.Drawing.Size(200, 149);
+            this.filesGroupBox.Size = new System.Drawing.Size(200, 119);
             this.filesGroupBox.TabIndex = 17;
             this.filesGroupBox.TabStop = false;
             this.filesGroupBox.Text = "File for Training";
@@ -217,9 +224,9 @@
             // dailySampleBox
             // 
             this.dailySampleBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.dailySampleBox.Location = new System.Drawing.Point(77, 120);
+            this.dailySampleBox.Location = new System.Drawing.Point(90, 91);
             this.dailySampleBox.Maximum = new decimal(new int[] {
-            30,
+            90,
             0,
             0,
             0});
@@ -242,12 +249,12 @@
             // 
             this.dailyButton.AutoSize = true;
             this.dailyButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.dailyButton.Location = new System.Drawing.Point(9, 120);
+            this.dailyButton.Location = new System.Drawing.Point(22, 91);
             this.dailyButton.Name = "dailyButton";
-            this.dailyButton.Size = new System.Drawing.Size(48, 17);
+            this.dailyButton.Size = new System.Drawing.Size(61, 17);
             this.dailyButton.TabIndex = 4;
             this.dailyButton.TabStop = true;
-            this.dailyButton.Text = "Daily";
+            this.dailyButton.Text = "Choose";
             this.dailyButton.UseVisualStyleBackColor = true;
             this.dailyButton.CheckedChanged += new System.EventHandler(this.dailyButton_CheckedChanged);
             // 
@@ -255,7 +262,7 @@
             // 
             this.weeklyButton.AutoSize = true;
             this.weeklyButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.weeklyButton.Location = new System.Drawing.Point(77, 90);
+            this.weeklyButton.Location = new System.Drawing.Point(90, 68);
             this.weeklyButton.Name = "weeklyButton";
             this.weeklyButton.Size = new System.Drawing.Size(61, 17);
             this.weeklyButton.TabIndex = 3;
@@ -267,7 +274,7 @@
             // 
             this.monthlyButton.AutoSize = true;
             this.monthlyButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.monthlyButton.Location = new System.Drawing.Point(9, 90);
+            this.monthlyButton.Location = new System.Drawing.Point(22, 68);
             this.monthlyButton.Name = "monthlyButton";
             this.monthlyButton.Size = new System.Drawing.Size(62, 17);
             this.monthlyButton.TabIndex = 2;
@@ -279,7 +286,7 @@
             // 
             this.sampleFormatLabel.AutoSize = true;
             this.sampleFormatLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.sampleFormatLabel.Location = new System.Drawing.Point(6, 73);
+            this.sampleFormatLabel.Location = new System.Drawing.Point(19, 51);
             this.sampleFormatLabel.Name = "sampleFormatLabel";
             this.sampleFormatLabel.Size = new System.Drawing.Size(77, 13);
             this.sampleFormatLabel.TabIndex = 1;
@@ -290,23 +297,22 @@
             this.filesListBox.BackColor = System.Drawing.SystemColors.Control;
             this.filesListBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.filesListBox.FormattingEnabled = true;
-            this.filesListBox.ItemHeight = 16;
-            this.filesListBox.Location = new System.Drawing.Point(6, 22);
+            this.filesListBox.Location = new System.Drawing.Point(6, 27);
             this.filesListBox.Name = "filesListBox";
-            this.filesListBox.Size = new System.Drawing.Size(188, 48);
+            this.filesListBox.Size = new System.Drawing.Size(188, 13);
             this.filesListBox.TabIndex = 0;
             // 
             // predictionGroupBox
             // 
             this.predictionGroupBox.Controls.Add(this.predictionRespone);
             this.predictionGroupBox.Controls.Add(this.predictButton);
-            this.predictionGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.predictionGroupBox.Location = new System.Drawing.Point(270, 232);
+            this.predictionGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.predictionGroupBox.Location = new System.Drawing.Point(270, 158);
             this.predictionGroupBox.Name = "predictionGroupBox";
-            this.predictionGroupBox.Size = new System.Drawing.Size(200, 313);
+            this.predictionGroupBox.Size = new System.Drawing.Size(200, 387);
             this.predictionGroupBox.TabIndex = 18;
             this.predictionGroupBox.TabStop = false;
-            this.predictionGroupBox.Text = "Tomorrow prediction";
+            this.predictionGroupBox.Text = "Testing";
             // 
             // predictionRespone
             // 
@@ -315,15 +321,15 @@
             this.predictionRespone.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.predictionRespone.FormattingEnabled = true;
             this.predictionRespone.ItemHeight = 15;
-            this.predictionRespone.Location = new System.Drawing.Point(22, 264);
+            this.predictionRespone.Location = new System.Drawing.Point(22, 98);
             this.predictionRespone.Name = "predictionRespone";
-            this.predictionRespone.Size = new System.Drawing.Size(157, 45);
+            this.predictionRespone.Size = new System.Drawing.Size(157, 135);
             this.predictionRespone.TabIndex = 1;
             // 
             // predictButton
             // 
             this.predictButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.predictButton.Location = new System.Drawing.Point(22, 232);
+            this.predictButton.Location = new System.Drawing.Point(22, 22);
             this.predictButton.Name = "predictButton";
             this.predictButton.Size = new System.Drawing.Size(157, 26);
             this.predictButton.TabIndex = 19;
@@ -623,7 +629,7 @@
             this.trainingIterationsBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.trainingIterationsBox.Location = new System.Drawing.Point(135, 29);
             this.trainingIterationsBox.Maximum = new decimal(new int[] {
-            10000,
+            1000000,
             0,
             0,
             0});
@@ -641,13 +647,6 @@
             0,
             0});
             this.trainingIterationsBox.ValueChanged += new System.EventHandler(this.trainingIterationsBox_ValueChanged);
-            // 
-            // closeToolStripMenuItem
-            // 
-            this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.closeToolStripMenuItem.Text = "Close";
-            this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
             // 
             // MainWindow
             // 

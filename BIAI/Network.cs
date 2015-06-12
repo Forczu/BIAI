@@ -89,7 +89,7 @@ namespace BIAI
         /// <summary>
         /// Mapa dat i wartości kursu
         /// </summary>
-        private List<Dictionary<DateTime, Double[]>> inputData;
+        private ExchangeData inputData;
         /// <summary>
         /// Średnie kursów walut dla każdego pliku wejściowego
         /// </summary>
@@ -353,39 +353,27 @@ namespace BIAI
         /// Dla N okresów, ostatni ma wartość n, z kolei ostatni 1
         /// W naszych plikach .CSV pierwszy okres jest ostatnim
         /// </summary>
-        public void PrepareData(ExchangeData data, ExchangeData.SplitMethod method, int days = 7)
+        public void PrepareData(ExchangeData data, int days = 7)
         {
-            // podzielenie pliku na mniejsze części wg metody
-            this.inputData = data.GetSplitData(method, days);
-
-            // dla każdego pliku wejściowego
-            for (int i = 0; i < inputData.Count; ++i)
+            this.inputData = data;
+            for (int i = 0; i < data.Count - days; ++i)
             {
-                // zmiana mapy na listę
-                List<Double[]> list = inputData[i].Values.ToList();
-
+                // uzyskanie mniejszej częsci danych wejściowych
+                List<Double[]> list = data.GetSplitData(i, days);
                 //obliczenie RSi dla kazdego pliku wejsciowego
                 RSI.Add(calculateRSI(list));
-
                 // obliczenie średnich każdego z kursów dziennych
-                meanClose.Add(this.CalculateEMA(inputData[i], 0));
-                meanHigh.Add(this.CalculateEMA(inputData[i], 1));
-                meanLow.Add(this.CalculateEMA(inputData[i], 2));
-                meanOpen.Add(this.CalculateEMA(inputData[i], 3));
+                meanClose.Add(this.CalculateEMA(list, 0));
+                meanHigh.Add(this.CalculateEMA(list, 1));
+                meanLow.Add(this.CalculateEMA(list, 2));
+                meanOpen.Add(this.CalculateEMA(list, 3));
                 // pozyskanie ostatnich wartości kursów
-                actualClose.Add(inputData[i].Last().Value[0]);
-                actualHigh.Add(inputData[i].Last().Value[1]);
-                actualLow.Add(inputData[i].Last().Value[2]);
-                actualOpen.Add(inputData[i].Last().Value[3]);
+                actualClose.Add(list[days - 2][0]);
+                actualHigh.Add(list[days - 2][1]);
+                actualLow.Add(list[days - 2][2]);
+                actualOpen.Add(list[days - 2][3]);
                 // pozyskanie wartości przewidywanej
-                if (i != inputData.Count - 1)
-                {
-                    tomorrowClose.Add(inputData[i + 1].First().Value[0]);
-                }
-                else
-                {
-                    tomorrowClose.Add(inputData[i].Last().Value[0]);
-                }
+                tomorrowClose.Add(list[days - 1][0]);
             }
         }
 
@@ -393,11 +381,11 @@ namespace BIAI
         /// Obliczenie wykładniczej średniej kroczącej
         /// Dla konkretnych danych kursu (Close = 1, Max = 2, Min = 3, Open = 4)
         /// </summary>
-        private double CalculateEMA(Dictionary<DateTime, Double[]> input, int which)
+        private double CalculateEMA(List<Double[]> input, int which)
         {
             if (input.Count == 1)
             {
-                return input.Values.ToList().Last()[which];
+                return input.Last()[which];
             }
             int periodNumber = input.Count;
             double alpha = 2.0d / (periodNumber + 1);
@@ -407,7 +395,7 @@ namespace BIAI
             foreach (var entry in input)
             {
                 double weight = Math.Pow(1 - alpha, periodNumber - i);
-                double value = entry.Value[which];
+                double value = entry[which];
                 numerator += value * weight;
                 denominator += weight;
                 ++i;
@@ -464,7 +452,9 @@ namespace BIAI
         /// <summary>
         /// Uruchomienie sieci
         /// </summary>
-        public float Run()
+        /// <param name="diff">Liczbę dni na zakres danych testowych</param>
+        /// <returns>Liczba poprawnych testów.</returns>
+        public int Run(Int32 diff)
         {
             //tablica wyników przewidywan
             double[] result = new double[inputData.Count - trainingDataCount];
@@ -472,7 +462,7 @@ namespace BIAI
             bool[] correctPredict = new bool[inputData.Count - trainingDataCount];
             int j = 0;
             //30% danych do testowania
-            for (int i = trainingDataCount; i < inputData.Count; ++i)
+            for (int i = trainingDataCount; i < inputData.Count - diff; ++i)
             {
                 result[j] = ourNetwork.Run(
                     new double[INPUT_NUMBER]
@@ -495,7 +485,7 @@ namespace BIAI
                 if (correctPredict[i])
                     true_count++;
 
-            return ((float)true_count / (float)correctPredict.Length) * 100;
+            return true_count;
         }
 
         public void EraseData()
@@ -509,6 +499,7 @@ namespace BIAI
             this.actualHigh.Clear();
             this.actualLow.Clear();
             this.actualOpen.Clear();
+            this.tomorrowClose.Clear();
         }
 
         #endregion

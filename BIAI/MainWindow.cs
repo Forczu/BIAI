@@ -48,8 +48,9 @@ namespace BIAI
 
         private Network ourNetwork;
         private CsvParser parser;
-        private ExchangeData data;
+        private ExchangeData data = null;
         private int selected_rsi_date = 0;
+        private Int32 chosenDaysDiff;
 
         public MainWindow()
         {
@@ -231,13 +232,15 @@ namespace BIAI
         {
             // wyczyszczenie obecnych danych
             ourNetwork.EraseData();
-            // podzielenie pliku na mniejsze części
+            // wybór liczby dni do podziału danych
             if (this.monthlyButton.Checked)
-                ourNetwork.PrepareData(data, ExchangeData.SplitMethod.Monthly);
+                this.chosenDaysDiff = 25;
             else if (this.weeklyButton.Checked)
-                ourNetwork.PrepareData(data, ExchangeData.SplitMethod.Weekly);
+                this.chosenDaysDiff = 7;
             else
-                ourNetwork.PrepareData(data, ExchangeData.SplitMethod.Daily, Convert.ToInt32(dailySampleBox.Value));
+                this.chosenDaysDiff = Convert.ToInt32(dailySampleBox.Value);
+            // podzielenie pliku na mniejsze części
+            ourNetwork.PrepareData(data, chosenDaysDiff);
         }
 
         /// <summary>
@@ -245,11 +248,15 @@ namespace BIAI
         /// </summary>
         private void predictButton_Click(object sender, EventArgs e)
         {
-            if (ourNetwork != null)
+            if (ourNetwork != null && data != null)
             {
                 this.predictionRespone.Items.Clear();
-                float efficiency = ourNetwork.Run();
-                this.predictionRespone.Items.Add("Sprawność sieci = " + Math.Ceiling(efficiency).ToString("0.0") + "%");
+                int correctNumber = ourNetwork.Run(chosenDaysDiff);
+                int sampleCount = data.Count - (int)Math.Ceiling(data.Count * 0.7f) - chosenDaysDiff;
+                float efficiency = (float)correctNumber / (float)sampleCount;
+                this.predictionRespone.Items.Add("Out of " + sampleCount.ToString() + " samples");
+                this.predictionRespone.Items.Add(correctNumber.ToString() + " were predicted correctly.");
+                this.predictionRespone.Items.Add("Network efficiency = " + (efficiency * 100).ToString("0.0") + "%");
             }
         }
 
