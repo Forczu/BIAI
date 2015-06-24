@@ -19,6 +19,9 @@
 \usepackage{listings,lstautogobble}
 \usepackage[usenames,dvipsnames]{xcolor}
 \usepackage{titlesec}
+\usepackage{multirow,tabularx}
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+\renewcommand{\arraystretch}{1.75}
 
 \makeatletter
 \@addtoreset{section}{part}
@@ -438,9 +441,9 @@
 		ourNetwork.Learn(trainingSet, iterations);
 		ourNetwork.StopLearning();
 	}
-	\end{lstlisting}
-	Funkcja \textit{Train} jest wywoływana po naciśnięciu przycisku Train w interfejsie użytkownika.  Najpierw tworzy nową sieć neuronową utworzoną zgodnie z biblioteką (patrz: tworzenie sieci w NeuronDotNet \ref{subsec:createNet}) oraz inicjuje ją wartościami z wybranymi przez użytkownika.\\
-	Następnie funkcja tworzy dane testowe, na które poświęca 70\% próbek danych (zaokrąglone w górę). Zestaw treningowy (\emph{training set}) musi mieć parametry zgodne z siecią - liczba wejść jest równa liczbie neuronów w warstwie wejściowej, a liczby wyjść liczbie neuronów z wyjściowej.\\
+	\end{lstlisting}\indent\indent
+	Funkcja \textit{Train} jest wywoływana po naciśnięciu przycisku Train w interfejsie użytkownika.  Najpierw tworzy nową sieć neuronową utworzoną zgodnie z biblioteką (patrz: tworzenie sieci w NeuronDotNet \ref{subsec:createNet}) oraz inicjuje ją wartościami z wybranymi przez użytkownika.\\\indent
+	Następnie funkcja tworzy dane testowe, na które poświęca 70\% próbek danych (zaokrąglone w górę). Zestaw treningowy (\emph{training set}) musi mieć parametry zgodne z siecią - liczba wejść jest równa liczbie neuronów w warstwie wejściowej, a liczby wyjść liczbie neuronów z wyjściowej.\\\indent
 	Do zestawu treningowego wprowadzane są próbki treningowe (\emph{training sample}). Ich wektory wejściowe i wyjściowe są tworzone zgodnie z algorytmem opisanym we wstępnym przetworzeniu danych\ref{subsec:przetworzenie}. Gdy wszystkie próbki zostaną utworzone rozpoczyna się nauka sieci oraz przekazanie jej zestawu treningowego oraz liczby iteracji sieci.
 	\subsection{Obliczanie współczynnika RSI}
 	\begin{lstlisting}
@@ -475,9 +478,9 @@
 		double RSI = 100 - (100 / (1 + (avg_growth / avg_fall)));
 		return RSI;
 	}
-	\end{lstlisting}
-	Metoda zwracająca współczynnik RSI (patrz: Analiza Problemu \ref{sec:analiza}). W celu obliczenia średniego wzrostu i spadku kursu wykorzystano pętle, która iteruje po podanej liście zawierającej dane historyczne kursów (parametr \emph{input}). Zależnie od tego czy różnica między wartością Close aktualnego dnia, a dnia następnego jest dodatnia czy ujemna, następuje dodanie tej różnicy do odpowiedniej listy (spadków / wzrostów). W przypadku wartości spadku różnica obliczana jest między dniem następnym, a aktualnym, po to aby wartości w obu listach były dodatnie.\\
-	W ciele funkcji odnosimy się do elementu zerowego tablicy, ponieważ właśnie tam znajdują się kursy zamknięcia (patrz: format pliku \ref{subsec:format}).\\
+	\end{lstlisting}\indent\indent
+	Metoda zwracająca współczynnik RSI (patrz: Analiza Problemu \ref{sec:analiza}). W celu obliczenia średniego wzrostu i spadku kursu wykorzystano pętle, która iteruje po podanej liście zawierającej dane historyczne kursów (parametr \emph{input}). Zależnie od tego czy różnica między wartością Close aktualnego dnia, a dnia następnego jest dodatnia czy ujemna, następuje dodanie tej różnicy do odpowiedniej listy (spadków / wzrostów). W przypadku wartości spadku różnica obliczana jest między dniem następnym, a aktualnym, po to aby wartości w obu listach były dodatnie.\\\indent
+	W ciele funkcji odnosimy się do elementu zerowego tablicy, ponieważ właśnie tam znajdują się kursy zamknięcia (patrz: format pliku \ref{subsec:format}).\\\indent
 	Po wyjściu z pętli następuje obliczenie średnich z wartości znajdujących się w listach, a następnie podstawienie tych wartości do wzoru (patrz: Analiza Problemu \ref{sec:analiza}) i zwrócenie jej przez metodę.
 	\newpage
 	\subsection{Testowanie sieci}
@@ -511,9 +514,35 @@
 						true_count++;
 				return true_count;
 			}
-		\end{lstlisting}
-		Metoda przekazująca 30\% danych wejściowych do sieci, zwracająca liczbę poprawnie przewidzianych dni. Składa się głownie z pętli, w której przekazuje się kolejne zestawy danych do sieci neuronowej, a następnie zapisuje zwracany wynik do listy (\textit{result}). Zwrócony wynik zostaje porównany z rzeczywistą wartością z zestawu danych - sprawdzane jest czy przewidziany kurs jest prawidłowo większy lub mniejszy od poprzedniego. Jeśli równanie jest spełnione następuję zapisanie do list wartości \textit{true}, jeśli nie to \textit{false}. Po wyjściu z pętli następuje podliczenie prawidłowych prognoz  w zmiennej (\textit{true\_count}), która jest wartością zwracaną przez metodę po wyjściu z pętli. Wynik ten jest liczbą poprawnie przewidzianych kursów.\\\\
+		\end{lstlisting}\indent\indent
+		Metoda przekazująca 30\% danych wejściowych do sieci, zwracająca liczbę poprawnie przewidzianych dni. Składa się głownie z pętli, w której przekazuje się kolejne zestawy danych do sieci neuronowej, a następnie zapisuje zwracany wynik do listy (\textit{result}). Zwrócony wynik zostaje porównany z rzeczywistą wartością z zestawu danych - sprawdzane jest czy przewidziany kurs jest prawidłowo większy lub mniejszy od poprzedniego. Jeśli równanie jest spełnione następuję zapisanie do list wartości \textit{true}, jeśli nie to \textit{false}. Po wyjściu z pętli następuje podliczenie prawidłowych prognoz  w zmiennej (\textit{true\_count}), która jest wartością zwracaną przez metodę po wyjściu z pętli. Wynik ten jest liczbą poprawnie przewidzianych kursów.\\\\\indent
 		Testując sieć neuronową przesyła się na jej warstwę wejściową różnice między aktualnymi wartościami kursów, a ich średnimi z danego zakresu (wybór użytkownika), a także wartość RSI z danego zakresu.
-		\part{Testy i wnioski}
-		
+		\part{Testy i wnioski}\indent\indent
+		Nasz program testowaliśmy na pliku zawierającym 368 danych łącznie z półtora roku historii kursu EUR/USD. Szukaliśmy takich ustawień, jakie umożliwiała nasza sieć, aby prawdopodobieństwo przewidzenia kursu było jak największe.
+		\newpage
+			\begin{table}[ht!]
+				\centering
+				\caption{Wyniki testowania}
+				\label{my-label}
+				\begin{tabular}{l|l|l|l|l|l}
+					{\bf Parameter}        & {\bf Test 1} & {\bf Test 2} & {\bf Test 3} & {\bf Test 4} & {\bf Test 5} \\ \hline
+					Initial Learning Rate  &  1.00        &   2.00       &  1.00        &  3.00        & 4.00         \\
+					Final Learning Rate    &  2.00        &   4.00       &  4.00        &  5.00        & 7.00         \\
+					Learning Function      &  None        &   None       &  None        &  Expotential & Linear       \\
+					Hidden Layer Count     &  1           &   2          &  2           &  3           & 3            \\
+					Layer 1 Neuron Count   &  6           &   10         &  6           &  10          & 14           \\
+					Layer 2 Neuron Count   &  -           &   9          &  7           &  10          & 12           \\
+					Layer 3 Neuron Count   &  -           &   -          &  -           &  4           & 6            \\
+					Initializer Function   &  None        &   Random     &  Zero        &  Constant    & NormalizedRandom\\
+					Initalizer Parameter 1 &  -           &   0          &  -           &  2           & -            \\
+					Initalizer Parameter 2 &  -           &   2          &  -           &  -           & -           \\
+					Sample Format          &  30          &   40         & 50           &  60          & 65           \\
+					Iterations             &  200         &   200        & 300          &  300         & 500          \\ \hline
+					{\bf Efficiency}       &  \textbf{47.5\%}      &  \textbf{48.6\%}   & \textbf{53.3\%}    & \textbf{52.0\%}  &  \textbf{51.1\%}            \\
+					{\bf MSE}              &  \textbf{0.0032\%}    &  \textbf{0.0031\%} & \textbf{0.0032\%}  & \textbf{0.0042\%}  & \textbf{0.0042\%}            
+				\end{tabular}
+			\end{table}
+		\vspace{0.5cm}
+		Przewidywanie kursu walutowego jest trudne, i jak widać wynikach, ciężko jest dobrać mnogość parametrów do najefektywniejszych wyników. Dla liczby okresów równej 50 sieć wykazuje największą zdolność przewidywania, która wręcz maleje ze zwiększeniem okresów. Ponadto, największe znaczenie dla naszej sieci ma liczba neuronów oraz warstw pośrednich - im większa tym lepsza efektywność. Funkcje poznawcze z kolei mają mocny wpływ na przebieg wykresu - czasem średni błąd kwadratowy osiąga prawie, że stałą wartość, a czasem dąży dalej ku zeru. Inicjalizatory wpływają na przebieg wykresu - dla funkcji Random często znajduje dobre rozwiązanie dopiero po setkach iteracji i wykres błędu spada gwałtowanie w dół. Z kolei wykres dla funkcji Zero jest najbardziej łagodny. Średni błąd kwadratowy z kolei, pomimo tego, że mocno dąży ku zeru, tak naprawdę nie odzwierciedla mocy przewidywania sieci. Wpływ może na to również mieć niewielka liczby danych wejściowych w porównaniu do profesjonalnych rozwiązań.\\\\\indent
+		Sam projekt okazał się o wiele prostszy i mniej złożony niż początkowo sądziliśmy. Trochę głębsze zapoznanie się z tematem sztucznej inteligencji pozwoliło nam poprawnie analizować problem oraz dobrać odpowiednie dane i algorytm do jego rozwiązania. Niestety, pomimo zadowalających efektów pracy sieci, raczej nie zostaniemy rekinami biznesu.
 \end{document}
