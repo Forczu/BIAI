@@ -413,14 +413,12 @@ namespace BIAI
             {
                 return input.First()[0];
             }
-
             int periodNumber = input.Count - start;
             double alpha = 2.0d / (periodNumber + 1);
             double denominator = 0.0d;
             double avg_growth = 0.0d, avg_fall = 0.0d;
             List<double> growth = new List<double>();
             List<double> fall = new List<double>();
-
             // porównanie wartości Close pomiędzy kolejnymi dniami oraz obliczenie spadku/wzrostu
             for (int i = start; i < periodNumber - 1; ++i)
             {
@@ -435,17 +433,13 @@ namespace BIAI
                     growth.Add((value_next - value) * weight);
                 else
                     growth.Add(0);
-
                 denominator += weight;
             }
-
             //obliczanie sredniego spadku/wzrostu
             avg_fall = fall.Sum() / denominator;
             avg_growth = growth.Sum() / denominator;
-
             //oblicznie RSI
             double RSI = 100 - (100 / (1 + (avg_growth / avg_fall)));
-
             return RSI;
         }
 

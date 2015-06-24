@@ -141,10 +141,10 @@
 	\newpage
 	
 	\part{Temat projektu}
-		\section{Cel zadania}
-		Naszym zadaniem było przewidywanie kursu walutowego EUR/USD (euro / dolar) na rynku Forex. W założeniach naszego projektu mieliśmy wykonać je na sieciach neuronowych.\\
+		\section{Cel zadania}\indent\indent
+		Naszym zadaniem było przewidywanie kursu walutowego EUR/USD (euro / dolar) na rynku Forex. W założeniach naszego projektu mieliśmy wykonać je na sieciach neuronowych.\\\indent
 		Idea przewidywania kursu walutowego polega na analizie danych historycznych kursu oraz trendu, jakim wykres kursu zmierza. Celem naszego programu jest takie wytrenowanie sieci neuronowej, aby sama mogła przewidzieć przyszły kursy. Wartości te są niezwykle zmienne w czasie i trudne do przewidzenia, a w profesjonalnym oprogramowaniu, gdy  prawdopodobieństwo prawidłowego oszacowania przyszłego kursu przekracza 60\% , jest to uznawane za sukces. Korzyścią takiego programu jest oczywiście ułatwienie podejmowania decyzji finansowych.
-		\section{Analiza problemu}\label{sec:analiza}
+		\section{Analiza problemu}\label{sec:analiza}\indent\indent
 			Wartości kursów na rynku Forex zmieniają się z dokładnością co do sekund (tzw. \emph{tick}, który nie ma stałej wartości). By móc uprościć nasze zadanie zdecydowaliśmy się pobierać dane z dokładnością co do \textit{dnia}. W tej jednostce można wyróżnić 4 wartości kursu:
 			\begin{itemize}
 				\item \textbf{Open} - wartość otwarcia danego dnia
@@ -159,7 +159,7 @@
 				\item $ A_k $ - średnia wartość wzrostu cen zamknięcia z \textit{k} dni
 				\item $ B_k $ - średnia wartość spadku cen zamknięcia z \textit{k} dni
 			\end{itemize}
-		\section{Wynik obliczeń}
+		\section{Wynik obliczeń}\indent\indent
 			Nasza sieć decyduje czy wartość kursu zamknięcia następnego dnia będzie większa lub mniejsza od kursu zamknięcia dnia dzisiejszego. Zwrócona przez sieć wartość interpretowana jest następująco:
 			\begin{itemize}
 				\item $ 0 $ - wartość kursu będzie mniejsza
@@ -187,7 +187,7 @@
 					\centering
 					\includegraphics[width=0.40\textwidth]{./img/GUI_initial_learning}
 					\caption{Panel do konfiguracji zdolności nauki z domyślnymi wartościami}
-				\end{figure}
+				\end{figure}\indent
 				Ten panel znajduje się w górnym lewym rogu interfejsu. Umożliwia konfigurację trzech parametrów:
 				\begin{itemize}
 					\item \emph{Initial Learning Rate} - wartość startowa zdolności nauki, z nią uruchamiany jest trening sieci.
@@ -234,7 +234,7 @@
 					\includegraphics[width=0.40\textwidth]{./img/GUI_network_training}
 					\caption{Przykładowy wynik trenowania sieci po 100 iteracjach}
 				\end{figure}
-				Ten panel znajduje się w dolnym prawym rogu. Wymaga od użytkownika wprowadzania liczby iteracji treningowych, jakie wykona sieć (domyślnie jest to wartość 100). Po wciśnięciu przycisku \emph{Train} sieć rozpocznie swój trening. Gdy zostanie on zakończony, na dole pojawia się \emph{Mean Sqaured Error} (średni kwadratowy błąd) sieci w procentach. Oznacza on jakie wg obliczeń jest prawdopodobieństwo błędu sieci, czyli złego przewidzenia linii trendu kursu waluty.\\
+				Ten panel znajduje się w dolnym prawym rogu. Wymaga od użytkownika wprowadzania liczby iteracji treningowych, jakie wykona sieć (domyślnie jest to wartość 100). Po wciśnięciu przycisku \emph{Train} sieć rozpocznie swój trening. Gdy zostanie on zakończony, na dole pojawia się \emph{Mean Sqaured Error} (średni kwadratowy błąd) sieci w procentach. Oznacza on jakie wg obliczeń jest prawdopodobieństwo błędu sieci, czyli złego przewidzenia linii trendu kursu waluty.\\\indent
 				Program poświęca 70\% próbek (zaokrąglonych w górę) do testów.
 			\newpage
 			\subsection{Trening sieci}
@@ -243,14 +243,14 @@
 					\includegraphics[width=0.30\textwidth]{./img/GUI_testing}
 					\caption{Przykładowy wynik testowania sieci}
 				\end{figure}
-				Na środku interfejsu znajduje się przycisk \emph{Predict away!}. Gdy sieć została wytrenowana i skonfigurowana, jego wciśnięcie powoduje uruchomienie testowania sieci i zmierzenie jej efektywności. Po wykonaniu testów informacje zostaną wyświetlone w tym samym panelu.\\ Program poświęca 30\% próbek w celu zbadania jakości działania sieci.
+				Na środku interfejsu znajduje się przycisk \emph{Predict away!}. Gdy sieć została wytrenowana i skonfigurowana, jego wciśnięcie powoduje uruchomienie testowania sieci i zmierzenie jej efektywności. Po wykonaniu testów informacje zostaną wyświetlone w tym samym panelu.\\\indent Program poświęca 30\% próbek w celu zbadania jakości działania sieci.
 			\subsection{Graf błędu}
 				\begin{figure}[h!]
 					\centering
 					\includegraphics[width=0.85\textwidth]{./img/GUI_graph}
 					\caption{Przykładowy przebieg nauki sieci}
 				\end{figure}
-				W czasie treningu sieci jest generowany graf zależności jakości sieci od liczby iteracji. Przedstawia on jak prawdopodobieństwo błędu zmieniało się wraz z kolejnymi iteracjami. Można powiedzieć, że obrazuje on, w jaki sposób sieć się uczy.\\
+				W czasie treningu sieci jest generowany graf zależności jakości sieci od liczby iteracji. Przedstawia on jak prawdopodobieństwo błędu zmieniało się wraz z kolejnymi iteracjami. Można powiedzieć, że obrazuje on, w jaki sposób sieć się uczy.\\\indent
 				Maksymalną wartością na osi poziomej jest liczba iteracji, z kolei na osi pionowej jest to maksymalny średni błąd kwadratowy (wyliczany dynamicznie w trakcie działania programu).
 		\section{Korzystanie z programu}
 			Aby móc wytrenować sieć i badać jej efekty, wystarczy wykonać kilka prostych kroków:
@@ -262,13 +262,13 @@
 			\end{enumerate}
 	\part{Wykonanie i specyfikacja wewnętrzna}
 		\section{Dane testowe}
-			\subsection{Zbieranie}
+			\subsection{Zbieranie}\indent\indent
 				By móc przystąpić do działania, potrzebowaliśmy danych historycznych o kursie EUR/USD na rynku Forex. Istnieje dużo stron, które udostępniają te dane za odpowiednią opłatą, ale nie chcąc ani wydawać dziesiątek dolarów za nie, ani zakładać własnej firmy, szukaliśmy źródła, które udostępniłoby dane za darmo i przyjaznym formacie. Ostatecznie znaleźliśmy dwie strony internetowe, które nam pomogły:
 				\begin{itemize}
 					\item \url{http://www.global-view.com/forex-trading-tools/forex-history/} - strona za darmo udostępnia dane historyczne na temat kursu EUR/USD w formacie CSV. W generowanych przez nią plikach, z dokładnością do dnia, znajdują się kursy zamknięcia, najwyższy oraz najniższy w ciągu dnia. Prawie idealnie spełniało to nasze potrzeby.
 					\item \url{http://pl.investing.com/currencies/eur-usd-historical-data} - strona za darmo wyświetla dane historyczne w postaci tabeli, której dane można kopiować. Mając dane z poprzedniej strony, wszystkie potrzebne nam wartości dziennych kursów otwarcia kopiowaliśmy ręcznie do pliku CSV.
 				\end{itemize}
-			\subsection{Format pliku}\label{subsec:format}
+			\subsection{Format pliku}\label{subsec:format}\indent\indent
 				Postanowiliśmy, żeby format pliku wejściowego był jak najprostszy, by dane mogły być szybko przetworzone, a jednocześnie wygodnie uzupełniane w miarę rozrastania się pliku. Zachowaliśmy plik CSV, jaki dostarczyła jedna ze stron, jest on wygodny oraz łatwy do sparsowania.\\
 				Przykładowy kawałek pliku:
 				\begin{lstlisting}
@@ -283,8 +283,8 @@
 				\begin{center}
 					Data, \textbf{C}lose (zamknięcie), \textbf{H}igh (maksymalny), \textbf{L}ow (minimalny), \textbf{O}pen (otwarcie)
 				\end{center}
-			\subsection{Parsowanie pliku}
-				Ponieważ istnieje spora liczba gotowych bibliotek do parsowania plików CSV, zdecydowaliśmy się nie pisać własnej funkcji, tylko skorzystać z jednej z już istniejących. Nie szukaliśmy długo, nasz wybór padł na małą, ale bardzo wysoko ocenianą bibliotekę "CSV Parser" autorstwa Ideafixxxer (prawdziwe imię i nazwisko nieznane) ze strony Code Project\footnote{Parser CSV: \url{http://www.codeproject.com/Tips/741941/CSV-Parser-Csharp}}.\\
+			\subsection{Parsowanie pliku}\indent\indent
+				Ponieważ istnieje spora liczba gotowych bibliotek do parsowania plików CSV, zdecydowaliśmy się nie pisać własnej funkcji, tylko skorzystać z jednej z już istniejących. Nie szukaliśmy długo, nasz wybór padł na małą, ale bardzo wysoko ocenianą bibliotekę "CSV Parser" autorstwa Ideafixxxer (prawdziwe imię i nazwisko nieznane) ze strony Code Project\footnote{Parser CSV: \url{http://www.codeproject.com/Tips/741941/CSV-Parser-Csharp}}.\\\indent
 				Biblioteka przyjmuje na wejście plik CSV oraz zwraca strukturę typu \textbf{\color{blue}{string}[][]} z informacjami z pliku CSV w postaci tekstu. Format ten nie jest dogodny dla naszych potrzeb, dlatego napisaliśmy własny kod, który zmienia ową tablicę dwuwymiarową na mapę: kluczem jest data, a wartością tablica jednoelementowa wartości typu \textbf{\color{blue}{double}}. Całość została zakapsułkowana do klasy \emph{ExchangeData}. Co prawda po formacie próbek wyraźnie widać, że wystarczyłby typ danych \textbf{\color{blue}{float}}, jednak nasza biblioteka przyjmuje jako parametry wartości \textbf{\color{blue}{double}}, więc postanowiliśmy poświęcić tych kilka kilobajtów by uniknąć konieczności wielokrotnego rzutowania.
 				\begin{lstlisting}
 					class ExchangeData
@@ -320,9 +320,129 @@
 						}
 					};
 				\end{lstlisting}
-	\theendnotes
+				\vfill
+				\theendnotes
 	\newpage
-	\section{Obliczanie współczynnika RSI}
+	\section{Biblioteka NeuronDotNet}\label{sec:bib}
+		\subsection{Szukanie rozwiązania}\indent\indent
+			Decydując się na znany nam język programowania C\# potrzebowaliśmy biblioteki do wykonania programu. Kierując się dostępnymi źródłami w internecie, wybraliśmy bibliotekę NeuronDotNet. Jest to małe oprogramowanie Open Source napisane przez Brytyjczyka Vijeth D\footnote{Prawdziwe imię i nazwisko autora nie jest znane.}. Biblioteka jest mało popularna, ale bardzo wysoko oceniana. Jej rozwój został zatrzymany kilka lat temu, lecz do dla naszego zadania okazała się w zupełności wystarczająca.
+		\subsection{Utworzenie sieci}\label{subsec:createNet}\indent\indent
+			Z biblioteki NeuronDotNet wykorzystaliśmy sieć propagacji wstecznej (ang. \emph{backpropagation network}). Przedstawia ją klasa \textit{BackpropagationNetwork}. Aby utworzyć poprawnie sieć należy wykonać następujące kroki:
+			\begin{enumerate}
+				\item Utworzyć warstwę wejściową (np. typu \textit{Linear}), z parametrem \textit{integer} - liczbę neuronów warstwy.
+				\begin{lstlisting}
+					LinearLayer inputLayer = new LinearLayer(INPUT_NUMBER);
+				\end{lstlisting}
+				\item Utworzyć skończoną liczbę warstw pośrednich. Każdej warstwie pośredniej należy również przekazać liczbę neuronów jakie posiada w postaci liczby całkowitej. Dla usprawnienia kontroli, warstwy można trzymać na w liście (jak w poniższym przykładzie), ale nie jest to wymagane.
+				\begin{lstlisting}
+					List<SigmoidLayer> hiddenLayerList = new List<SigmoidLayer>();
+					for (int i = 0; i < hiddenLayerCount; i++)
+						hiddenLayerList.Add(new SigmoidLayer(neuronCountList[i]));
+				\end{lstlisting}
+				\item Utworzyć warstwę wyjściową.
+				\begin{lstlisting}
+					SigmoidLayer outputLayer = new SigmoidLayer(OUTPUT_NUMBER);
+				\end{lstlisting}
+				\item Mając utworzone wszystkie warstwy należy je połączyć obiektami klas typu \textit{Connector}. Nowe obiekty można po prostu wywołać instrukcją \textit{new}, bez konieczności przypisywania ich do czegokolwiek. \textit{Connector} przyjmuje dwa argumenty - warstwy, które ma połączyć. Na przykładzie warstwa wejściowa i pierwsza warstwa pośrednia.
+				\begin{lstlisting}
+					new BackpropagationConnector(inputLayer, hiddenLayerList[0]);
+				\end{lstlisting}
+				Tworząc połączenia można również wykorzystać ich inicjalizatory (\emph{initializers}), które ustawiają początkowe wagi synaps propagacji wstecznej w danym connectorze.
+				\begin{lstlisting}
+					new BackpropagationConnector(inputLayer, hiddenLayerList[0]).Initializer = new NormalizedRandomFunction();
+				\end{lstlisting}
+				Dostępnych jest 5 różnych typów inicjalizatorów:
+				\begin{itemize}
+					\item \emph{ConstantFunction}, przyjmuje jeden parametr typu \textit{double}
+					\item \emph{NguyenWidrowFunction}, przyjmuje jeden parametr typu \textit{double}
+					\item \emph{NormalizedRandomFunction}, bezparametrowa
+					\item \emph{RandomFunction}, przyjmuje dwa parametry typu \textit{double}
+					\item \emph{ZeroFunction}, bezparametrowa
+				\end{itemize}
+				Z poziomu GUI użytkownik dokonuje wyboru jednego z nich lub braku inicjalizatora połączenia.
+				\vfill
+				\theendnotes
+				\newpage
+				\item W powyższy sposób należy połączyć pozostałe utworzone warstwy w odpowiedniej kolejności, z inicjalizatorem lub bez.
+				\begin{lstlisting}
+					for (int i = 1; i < hiddenLayerCount; i++)
+					{
+						new BackpropagationConnector(hiddenLayerList[i - 1], hiddenLayerList[i]);
+					}
+					new BackpropagationConnector(hiddenLayerList[hiddenLayerCount - 1], outputLayer);
+				\end{lstlisting}
+				\item W ostatnim kroku należy utworzyć naszą sieć jako nowy obiekt klasy \textit{BackpropagationNetwork}. Konstruktor przyjmuje dwa parametry - warstwę wejściową i wyjściową. Ponieważ warstwy pośrednie i połączenia między nimi zostały zdefiniowane wcześniej, obiekt \textit{ourNetwork} jest w pełni gotowy do pracy.
+				\begin{lstlisting}
+					BackpropagationNetwork ourNetwork = new BackpropagationNetwork(inputLayer, outputLayer);
+				\end{lstlisting}
+				\item Tak przygotowaną sieć można wytrenować przekazując jej przygotowany zestaw treningowy (szczegóły w Trenowanie sieci \ref{subsec:train}), a następnie wykorzystać.
+			\end{enumerate}
+		\subsection{Zdolność nauki sieci}\indent\indent
+			Po utworzeniu sieci, biblioteka NeuronDotNet umożliwia zmianę kilku parametrów, które wpływają na efekty treningu. Są to wartości związane ze zdolnościami nauki sieci, czyli określenie specjalizowanej funkcji do nauki oraz jej dwóch parametrów: zdolności startowej nauki, z którą uruchamiany jest trening sieci oraz końcowej, którą sieć będzie mieć pod koniec treningu, oba typu \textit{double}.\\\indent
+			Funkcja może być standardowa, wywołana w ten sposób:
+			\begin{lstlisting}
+				BackpropagationNetwork ourNetwork;
+				ourNetwork.SetLearningRate(initialLearningRate, finalLearningRate);
+			\end{lstlisting}
+			Można również wybrać jedną z dostępnych funkcji:
+			\begin{itemize}
+				\item \emph{ExpotentialFunction} - funkcja eksponencjalna
+				\item \emph{HyperbolicFunction} - funkcja hiperboliczna
+				\item \emph{LinearFunction} - funkcja liniowa
+			\end{itemize}
+			\begin{lstlisting}
+				BackpropagationNetwork ourNetwork;
+				ourNetwork.SetLearningRate(new ExponentialFunction(initialLearningRate, finalLearningRate));
+			\end{lstlisting}
+			Wszystkie trzy parametry są możliwe do ustalenia przed użytkownika w interfejsie graficznym.
+	\section{Algorytmy działania programu}
+	\subsection{Wstępne przetworzenie danych}\label{subsec:przetworzenie}\indent\indent
+		Nasze dane wejściowe są dzielone na dwie części: 70\% jest poświęconych dla trenowania sieci, z kolei pozostałe 30\% dla testowania. W obu grupach dane próbkowe są wyliczane tak samo. Użytkownik podaje przedział czasowy wg którego chce badać dane, muszą to być co najmniej 3 dni (okresy) oraz mniej niż całkowita liczba danych wejściowych. W momencie przystąpienia do treningu i testowania, dane są wstępnie przetwarzane dla złagodzenia linii trendu i efektywniejszych obliczeń.\\\indent
+		Dla \textit{n} danych wejściowych i podziale równym \textit{k} okresów, gdzie $ n > k $, dane są dzielone na $ (n-k) $ grup. W obrębie \textit{k}-licznej grupy wyliczana jest średnia krocząca wykładnicza z $ k-1 $ argumentów, gdzie ten z najbliższą datą jest najważniejszy. Argument \textit{k}-ty z kolei stanowi wartość oczekiwaną. Procedura ta jest wykonywana dla każdej z czterech dziennych wartości kursu.\\\indent
+		Przykładowo, posiadając 200 próbek dzielonych po 10 okresów, tworzymy 190 grup danych. W każdej z grup liczymy średnią wykładniczą z 9 argumentów, a ostatni jest wartością oczekiwaną. 70\% tych grup będzie stanowiło zestaw treningowy dla sieci.\\\indent
+		Wektor wejściowy każdej próbki treningowej składa się z pięciu parametrów:
+		\begin{itemize}
+			\item Cztery z nich to różnice pomiędzy aktualnymi kursami zamknięcia, najniższym, najwyższym oraz otwarcia, a między średnimi wykładniczymi tych kursów z danego okresu. Wartości średnie są wyliczane przed wywołaniem funkcji \textit{Train} dla każdej z próbek.
+			\item Piątym parametrem jest współczynnik RSI obliczony dla tego samego okresu.
+		\end{itemize}\indent\indent
+		Z kolei wektor wyjściowy to różnica pomiędzy jutrzejszym kursem zamknięcia, a aktualnym kursem zamknięcia. Jeśli jest on większy od zera oznacza wzrost, a jeśli mniejszy to spadek wartości kursu.
+	\subsection{Trenowanie sieci}\label{subsec:train}
+	\begin{lstlisting}
+	public void Train()
+	{
+		// Utworzenie sieci neuronowej
+		CreateNetwork();
+		// ustawienie mocy poznawczej
+		SetNetworkLearningRate();
+		TrainingSet trainingSet = new TrainingSet(INPUT_NUMBER, OUTPUT_NUMBER);
+		// 70% danych do treningu
+		trainingDataCount = (int)Math.Ceiling(inputData.Count * 0.7);
+		for (int i = 0; i < trainingDataCount; ++i)
+		{
+			trainingSet.Add(
+				new TrainingSample(
+					// wektor wej. - różnice między aktualną wartością, a średnią
+					new double[INPUT_NUMBER]
+					{
+						actualClose[i] - meanClose[i], actualHigh[i] - meanHigh[i], actualLow[i] - meanLow[i], actualOpen[i] - meanOpen[i], RSI[i]
+					},
+					// wektor wyj. - różnica między jutrzejszym kursem zamknięcia, a aktualnym
+					new double[1]
+					{
+						tomorrowClose[i] - actualClose[i]
+					}
+				)
+			);
+		}
+		// nauka sieci
+		ourNetwork.Learn(trainingSet, iterations);
+		ourNetwork.StopLearning();
+	}
+	\end{lstlisting}
+	Funkcja \textit{Train} jest wywoływana po naciśnięciu przycisku Train w interfejsie użytkownika.  Najpierw tworzy nową sieć neuronową utworzoną zgodnie z biblioteką (patrz: tworzenie sieci w NeuronDotNet \ref{subsec:createNet}) oraz inicjuje ją wartościami z wybranymi przez użytkownika.\\
+	Następnie funkcja tworzy dane testowe, na które poświęca 70\% próbek danych (zaokrąglone w górę). Zestaw treningowy (\emph{training set}) musi mieć parametry zgodne z siecią - liczba wejść jest równa liczbie neuronów w warstwie wejściowej, a liczby wyjść liczbie neuronów z wyjściowej.\\
+	Do zestawu treningowego wprowadzane są próbki treningowe (\emph{training sample}). Ich wektory wejściowe i wyjściowe są tworzone zgodnie z algorytmem opisanym we wstępnym przetworzeniu danych\ref{subsec:przetworzenie}. Gdy wszystkie próbki zostaną utworzone rozpoczyna się nauka sieci oraz przekazanie jej zestawu treningowego oraz liczby iteracji sieci.
+	\subsection{Obliczanie współczynnika RSI}
 	\begin{lstlisting}
 	private double calculateRSI(List<Double[]> input, int start = 0)
 	{
@@ -359,5 +479,41 @@
 	Metoda zwracająca współczynnik RSI (patrz: Analiza Problemu \ref{sec:analiza}). W celu obliczenia średniego wzrostu i spadku kursu wykorzystano pętle, która iteruje po podanej liście zawierającej dane historyczne kursów (parametr \emph{input}). Zależnie od tego czy różnica między wartością Close aktualnego dnia, a dnia następnego jest dodatnia czy ujemna, następuje dodanie tej różnicy do odpowiedniej listy (spadków / wzrostów). W przypadku wartości spadku różnica obliczana jest między dniem następnym, a aktualnym, po to aby wartości w obu listach były dodatnie.\\
 	W ciele funkcji odnosimy się do elementu zerowego tablicy, ponieważ właśnie tam znajdują się kursy zamknięcia (patrz: format pliku \ref{subsec:format}).\\
 	Po wyjściu z pętli następuje obliczenie średnich z wartości znajdujących się w listach, a następnie podstawienie tych wartości do wzoru (patrz: Analiza Problemu \ref{sec:analiza}) i zwrócenie jej przez metodę.
-	
+	\newpage
+	\subsection{Testowanie sieci}
+		\begin{lstlisting}
+			public int Run(Int32 diff)
+			{
+				//tablica wyników przewidywan
+				double[] result = new double[inputData.Count - trainingDataCount];
+				//true jesli wynik przewidywania i aktualne dane sie pokrywaja
+				bool[] correctPredict = new bool[inputData.Count - trainingDataCount];
+				int j = 0;
+				//30% danych do testowania
+				for (int i = trainingDataCount; i < inputData.Count - diff; ++i)
+				{
+					result[j] = ourNetwork.Run(
+					new double[INPUT_NUMBER]
+					{
+						actualClose[i] - meanClose[i], actualHigh[i] - meanHigh[i], actualLow[i] - meanLow[i], actualOpen[i] - meanOpen[i], RSI[i]
+					})[0];
+					if ((tomorrowClose[i] - actualClose[i]) > 0 && result[j] > 0)
+						correctPredict[j] = true;
+					else if ((tomorrowClose[i] - actualClose[i]) <= 0 && result[j] <= 0)
+						correctPredict[j] = true;
+					else
+						correctPredict[j] = false;
+					j++;
+				}
+				int true_count = 0;
+				for (int i = 0; i < correctPredict.Length; ++i)
+					if (correctPredict[i])
+						true_count++;
+				return true_count;
+			}
+		\end{lstlisting}
+		Metoda przekazująca 30\% danych wejściowych do sieci, zwracająca liczbę poprawnie przewidzianych dni. Składa się głownie z pętli, w której przekazuje się kolejne zestawy danych do sieci neuronowej, a następnie zapisuje zwracany wynik do listy (\textit{result}). Zwrócony wynik zostaje porównany z rzeczywistą wartością z zestawu danych - sprawdzane jest czy przewidziany kurs jest prawidłowo większy lub mniejszy od poprzedniego. Jeśli równanie jest spełnione następuję zapisanie do list wartości \textit{true}, jeśli nie to \textit{false}. Po wyjściu z pętli następuje podliczenie prawidłowych prognoz  w zmiennej (\textit{true\_count}), która jest wartością zwracaną przez metodę po wyjściu z pętli. Wynik ten jest liczbą poprawnie przewidzianych kursów.\\\\
+		Testując sieć neuronową przesyła się na jej warstwę wejściową różnice między aktualnymi wartościami kursów, a ich średnimi z danego zakresu (wybór użytkownika), a także wartość RSI z danego zakresu.
+		\part{Testy i wnioski}
+		
 \end{document}
