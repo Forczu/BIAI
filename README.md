@@ -1,2 +1,0 @@
-# BIAI
-Przewidywanie kursu walutowego
